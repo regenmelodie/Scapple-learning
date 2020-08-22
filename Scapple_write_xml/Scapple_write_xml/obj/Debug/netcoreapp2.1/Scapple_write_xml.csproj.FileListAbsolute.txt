@@ -1,0 +1,11 @@
+C:\Users\Regen\Desktop\Scapple-learning\Scapple_write_xml\Scapple_write_xml\bin\Debug\netcoreapp2.1\Scapple_write_xml.deps.json
+C:\Users\Regen\Desktop\Scapple-learning\Scapple_write_xml\Scapple_write_xml\bin\Debug\netcoreapp2.1\Scapple_write_xml.runtimeconfig.json
+C:\Users\Regen\Desktop\Scapple-learning\Scapple_write_xml\Scapple_write_xml\bin\Debug\netcoreapp2.1\Scapple_write_xml.runtimeconfig.dev.json
+C:\Users\Regen\Desktop\Scapple-learning\Scapple_write_xml\Scapple_write_xml\bin\Debug\netcoreapp2.1\Scapple_write_xml.dll
+C:\Users\Regen\Desktop\Scapple-learning\Scapple_write_xml\Scapple_write_xml\bin\Debug\netcoreapp2.1\Scapple_write_xml.pdb
+C:\Users\Regen\Desktop\Scapple-learning\Scapple_write_xml\Scapple_write_xml\obj\Debug\netcoreapp2.1\Scapple_write_xml.csprojAssemblyReference.cache
+C:\Users\Regen\Desktop\Scapple-learning\Scapple_write_xml\Scapple_write_xml\obj\Debug\netcoreapp2.1\Scapple_write_xml.csproj.CoreCompileInputs.cache
+C:\Users\Regen\Desktop\Scapple-learning\Scapple_write_xml\Scapple_write_xml\obj\Debug\netcoreapp2.1\Scapple_write_xml.AssemblyInfoInputs.cache
+C:\Users\Regen\Desktop\Scapple-learning\Scapple_write_xml\Scapple_write_xml\obj\Debug\netcoreapp2.1\Scapple_write_xml.AssemblyInfo.cs
+C:\Users\Regen\Desktop\Scapple-learning\Scapple_write_xml\Scapple_write_xml\obj\Debug\netcoreapp2.1\Scapple_write_xml.dll
+C:\Users\Regen\Desktop\Scapple-learning\Scapple_write_xml\Scapple_write_xml\obj\Debug\netcoreapp2.1\Scapple_write_xml.pdb

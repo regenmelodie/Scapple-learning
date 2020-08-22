@@ -8,6 +8,15 @@
             <Border Weight="0" Style="Rounded"/>
          </Appearance>
          <String>New Note</String>
+         <ConnectedNoteIDs>1</ConnectedNoteIDs>
+      </Note>
+      <Note Width="17.9199" FontSize="12" ID="1" Position="462.0,202.0">
+         <Appearance>
+            <Alignment>Left</Alignment>
+            <Border Weight="0" Style="Rounded"/>
+         </Appearance>
+         <String>a</String>
+         <ConnectedNoteIDs>0</ConnectedNoteIDs>
       </Note>
    </Notes>
    <BackgroundShapes/>
