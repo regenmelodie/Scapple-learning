@@ -29,13 +29,15 @@
         private void InitializeComponent()
         {
             this.menuStrip1 = new System.Windows.Forms.MenuStrip();
-            this.ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.NewFile = new System.Windows.Forms.ToolStripMenuItem();
+            this.File = new System.Windows.Forms.ToolStripMenuItem();
+            this.New = new System.Windows.Forms.ToolStripMenuItem();
             this.ToolStripMenuItem2 = new System.Windows.Forms.ToolStripMenuItem();
             this.ToolStripMenuItem3 = new System.Windows.Forms.ToolStripMenuItem();
             this.Save = new System.Windows.Forms.ToolStripMenuItem();
-            this.saveFileDialog = new System.Windows.Forms.SaveFileDialog();
             this.SaveAs = new System.Windows.Forms.ToolStripMenuItem();
+            this.Notes = new System.Windows.Forms.ToolStripMenuItem();
+            this.NewNote = new System.Windows.Forms.ToolStripMenuItem();
+            this.saveFileDialog = new System.Windows.Forms.SaveFileDialog();
             this.menuStrip1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -43,57 +45,73 @@
             // 
             this.menuStrip1.ImageScalingSize = new System.Drawing.Size(24, 24);
             this.menuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.ToolStripMenuItem});
+            this.File,
+            this.Notes});
             this.menuStrip1.Location = new System.Drawing.Point(0, 0);
             this.menuStrip1.Name = "menuStrip1";
             this.menuStrip1.Size = new System.Drawing.Size(1295, 32);
             this.menuStrip1.TabIndex = 0;
             this.menuStrip1.Text = "menuStrip1";
             // 
-            // ToolStripMenuItem
+            // File
             // 
-            this.ToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.NewFile,
+            this.File.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.New,
             this.ToolStripMenuItem2,
             this.ToolStripMenuItem3,
             this.Save,
             this.SaveAs});
-            this.ToolStripMenuItem.Name = "ToolStripMenuItem";
-            this.ToolStripMenuItem.Size = new System.Drawing.Size(58, 28);
-            this.ToolStripMenuItem.Text = "文件";
+            this.File.Name = "File";
+            this.File.Size = new System.Drawing.Size(52, 28);
+            this.File.Text = "File";
             // 
-            // NewFile
+            // New
             // 
-            this.NewFile.Name = "NewFile";
-            this.NewFile.Size = new System.Drawing.Size(252, 30);
-            this.NewFile.Text = "新建";
-            this.NewFile.Click += new System.EventHandler(this.NewFile_Click);
+            this.New.Name = "New";
+            this.New.Size = new System.Drawing.Size(157, 30);
+            this.New.Text = "New";
+            this.New.Click += new System.EventHandler(this.New_Click);
             // 
             // ToolStripMenuItem2
             // 
             this.ToolStripMenuItem2.Name = "ToolStripMenuItem2";
-            this.ToolStripMenuItem2.Size = new System.Drawing.Size(252, 30);
-            this.ToolStripMenuItem2.Text = "打开";
+            this.ToolStripMenuItem2.Size = new System.Drawing.Size(157, 30);
+            this.ToolStripMenuItem2.Text = "Open";
             // 
             // ToolStripMenuItem3
             // 
             this.ToolStripMenuItem3.Name = "ToolStripMenuItem3";
-            this.ToolStripMenuItem3.Size = new System.Drawing.Size(252, 30);
-            this.ToolStripMenuItem3.Text = "关闭";
+            this.ToolStripMenuItem3.Size = new System.Drawing.Size(157, 30);
+            this.ToolStripMenuItem3.Text = "Close";
             // 
             // Save
             // 
             this.Save.Name = "Save";
-            this.Save.Size = new System.Drawing.Size(252, 30);
-            this.Save.Text = "保存";
+            this.Save.Size = new System.Drawing.Size(157, 30);
+            this.Save.Text = "Save";
             this.Save.Click += new System.EventHandler(this.Save_Click);
             // 
             // SaveAs
             // 
             this.SaveAs.Name = "SaveAs";
-            this.SaveAs.Size = new System.Drawing.Size(252, 30);
-            this.SaveAs.Text = "另存为";
+            this.SaveAs.Size = new System.Drawing.Size(157, 30);
+            this.SaveAs.Text = "Save As";
             this.SaveAs.Click += new System.EventHandler(this.SaveAs_Click);
+            // 
+            // Notes
+            // 
+            this.Notes.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.NewNote});
+            this.Notes.Name = "Notes";
+            this.Notes.Size = new System.Drawing.Size(73, 28);
+            this.Notes.Text = "Notes";
+            // 
+            // NewNote
+            // 
+            this.NewNote.Name = "NewNote";
+            this.NewNote.Size = new System.Drawing.Size(179, 30);
+            this.NewNote.Text = "New Note";
+            this.NewNote.Click += new System.EventHandler(this.NewNote_Click);
             // 
             // Form1
             // 
@@ -102,7 +120,7 @@
             this.ClientSize = new System.Drawing.Size(1295, 735);
             this.Controls.Add(this.menuStrip1);
             this.Name = "Form1";
-            this.Text = "Form1";
+            this.Text = "Scapple";
             this.menuStrip1.ResumeLayout(false);
             this.menuStrip1.PerformLayout();
             this.ResumeLayout(false);
@@ -113,13 +131,15 @@
         #endregion
 
         private System.Windows.Forms.MenuStrip menuStrip1;
-        private System.Windows.Forms.ToolStripMenuItem ToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem NewFile;
+        private System.Windows.Forms.ToolStripMenuItem File;
+        private System.Windows.Forms.ToolStripMenuItem New;
         private System.Windows.Forms.ToolStripMenuItem ToolStripMenuItem2;
         private System.Windows.Forms.ToolStripMenuItem ToolStripMenuItem3;
         private System.Windows.Forms.ToolStripMenuItem Save;
         private System.Windows.Forms.SaveFileDialog saveFileDialog;
         private System.Windows.Forms.ToolStripMenuItem SaveAs;
+        private System.Windows.Forms.ToolStripMenuItem Notes;
+        private System.Windows.Forms.ToolStripMenuItem NewNote;
     }
 }
 

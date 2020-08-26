@@ -8,6 +8,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Xml;
+using System.Collections;
 
 namespace Scapple_Real_Final
 {
@@ -15,18 +16,19 @@ namespace Scapple_Real_Final
     {
         private XmlDocument doc;
         private string path;
+        private Dictionary<string, Button> buttons; //记录新增的<Note>
+        private bool isMouseDown = false;
+        private Point mouseOffset; //记录鼠标指针的坐标
+        Button current_button;
+        int id = -1; //记录Note的ID，本程序为用户创建的Note自动分配ID
 
         public Form1()
         {
             InitializeComponent();
+            buttons = new Dictionary<string, Button>();
         }
 
-        private void toolStripComboBox1_Click(object sender, EventArgs e)
-        {
-
-        }
-
-        private void NewFile_Click(object sender, EventArgs e)
+        private void New_Click(object sender, EventArgs e)
         {
             //创建XML文档
             doc = new XmlDocument();
@@ -241,7 +243,27 @@ namespace Scapple_Real_Final
 
         private void Save_Click(object sender, EventArgs e)
         {
-            
+            if (path == null)
+            {
+                SaveFileDialog saveFileDialog = new SaveFileDialog();
+                saveFileDialog.Filter = "Scapple File|*.scap"; //筛选：允许类型为.scap的文件
+                saveFileDialog.Title = "Save a Scapple File";
+                saveFileDialog.RestoreDirectory = true; //保存对话框是否记忆上次打开的目录
+                saveFileDialog.CheckPathExists = true; //检查目录
+                saveFileDialog.FileName = "Untitled"; //设置默认文件名
+
+                if (saveFileDialog.ShowDialog() == DialogResult.OK)
+                {
+                    path = saveFileDialog.FileName;
+                    doc.Save(path);
+                    MessageBox.Show(this, "保存成功！", "提示");
+                }
+            }
+            else
+            {
+                doc.Save(path);
+                MessageBox.Show(this, "保存成功！", "提示");
+            }
         }
 
         private void SaveAs_Click(object sender, EventArgs e)
@@ -255,10 +277,125 @@ namespace Scapple_Real_Final
             
             if (saveFileDialog.ShowDialog() == DialogResult.OK)
             {
-                doc.Save(saveFileDialog.FileName);
                 path = saveFileDialog.FileName;
+                doc.Save(path);
                 MessageBox.Show(this, "保存成功！", "提示");
             }
+        }
+
+        private void button_MouseDown(object sender, MouseEventArgs e)
+        {
+            if (e.Button == MouseButtons.Left)
+            {
+                mouseOffset.X = e.X;
+                mouseOffset.Y = e.Y;
+                isMouseDown = true;
+
+                //跳转到当前节点
+                Button _button = (Button)sender;
+                current_button = buttons[_button.Name];
+            }
+        }
+
+        private void button_MouseMove(object sender, MouseEventArgs e)
+        {
+            if (isMouseDown)
+            {
+                int left = current_button.Left + e.X - mouseOffset.X;
+                int top = current_button.Top + e.Y - mouseOffset.Y;
+                current_button.Location = new Point(left, top);
+            }
+        }
+
+        private void button_MouseUp(object sender, MouseEventArgs e)
+        {
+            if (e.Button == MouseButtons.Left)
+            {
+                isMouseDown = false;
+
+                //将当前节点的Location信息写入XML文件
+                XmlNode scappleDocument = doc.SelectSingleNode("ScappleDocument");  //查找<ScappleDocument>
+                XmlNode notes = scappleDocument.SelectSingleNode("Notes");
+                //百度怎么修改xml一个节点的属性
+
+
+
+
+            }
+        }
+
+        private void button_MouseClick(object sender, MouseEventArgs e) //选中当前节点，屏幕显示当前节点的数据
+        {
+            /*
+            Button _button = (Button)sender;
+            MessageBox.Show(_button.Name); //获取当前Button的名称
+            */
+        }
+
+        private void button_MouseDoubleClick(object sender, MouseEventArgs e) //修改节点text
+        {
+
+        }
+
+        private void NewNote_Click(object sender, EventArgs e)
+        {
+            current_button = new Button();
+            id += 1;
+            current_button.Text = "New Note";
+            current_button.Name = id.ToString(); //button的Name属性就是Note的id字符串
+
+            current_button.MouseDown += new MouseEventHandler(button_MouseDown);
+            current_button.MouseMove += new MouseEventHandler(button_MouseMove);
+            current_button.MouseUp += new MouseEventHandler(button_MouseUp);
+            current_button.MouseClick += new MouseEventHandler(button_MouseClick);
+            current_button.MouseDoubleClick += new MouseEventHandler(button_MouseDoubleClick);
+
+            current_button.Size = new System.Drawing.Size(66, 26);
+            current_button.Font = new Font("Tahoma", 12, FontStyle.Bold);
+            current_button.UseVisualStyleBackColor = true;
+            current_button.Location = new System.Drawing.Point(100, 100);
+
+            this.Controls.Add(current_button);
+            buttons.Add(current_button.Name, current_button);
+
+
+            //在XML里新建节点
+            XmlNode scappleDocument = doc.SelectSingleNode("ScappleDocument");  //查找<ScappleDocument>
+            XmlNode notes = scappleDocument.SelectSingleNode("Notes");
+
+            XmlElement note = doc.CreateElement("Note"); //创建一个<Note>节点
+
+            //设置该节点属性
+            note.SetAttribute("Width", current_button.Size.Width.ToString());
+            note.SetAttribute("FontSize", current_button.Font.Size.ToString());
+            note.SetAttribute("ID", current_button.Name);
+            note.SetAttribute("Position", current_button.Location.X.ToString()+","+ current_button.Location.Y.ToString());
+
+            XmlElement appearance = doc.CreateElement("Appearance");
+
+            XmlElement alignment = doc.CreateElement("Alignment");
+            alignment.InnerText = "Left"; //设置文本节点
+
+            XmlElement border = doc.CreateElement("Border");
+            border.SetAttribute("Weight", "0");
+            border.SetAttribute("Style", "Rounded");
+
+            appearance.AppendChild(alignment); //添加到<Appearance>节点中
+            appearance.AppendChild(border);
+
+            XmlElement _string = doc.CreateElement("String");
+            _string.InnerText = current_button.Text;
+
+            XmlElement connectedNoteIDs = doc.CreateElement("ConnectedNoteIDs");
+            connectedNoteIDs.InnerText = "";
+
+            note.AppendChild(appearance);
+            note.AppendChild(_string);
+            note.AppendChild(connectedNoteIDs);
+
+            notes.AppendChild(note);
+            scappleDocument.AppendChild(notes);
+
         }
     }
 }
