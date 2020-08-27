@@ -38,6 +38,7 @@
             this.Notes = new System.Windows.Forms.ToolStripMenuItem();
             this.NewNote = new System.Windows.Forms.ToolStripMenuItem();
             this.saveFileDialog = new System.Windows.Forms.SaveFileDialog();
+            this.textBox1 = new System.Windows.Forms.TextBox();
             this.menuStrip1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -113,11 +114,19 @@
             this.NewNote.Text = "New Note";
             this.NewNote.Click += new System.EventHandler(this.NewNote_Click);
             // 
+            // textBox1
+            // 
+            this.textBox1.Location = new System.Drawing.Point(649, 381);
+            this.textBox1.Name = "textBox1";
+            this.textBox1.Size = new System.Drawing.Size(100, 28);
+            this.textBox1.TabIndex = 1;
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 18F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1295, 735);
+            this.Controls.Add(this.textBox1);
             this.Controls.Add(this.menuStrip1);
             this.Name = "Form1";
             this.Text = "Scapple";
@@ -140,6 +149,7 @@
         private System.Windows.Forms.ToolStripMenuItem SaveAs;
         private System.Windows.Forms.ToolStripMenuItem Notes;
         private System.Windows.Forms.ToolStripMenuItem NewNote;
+        private System.Windows.Forms.TextBox textBox1;
     }
 }
 

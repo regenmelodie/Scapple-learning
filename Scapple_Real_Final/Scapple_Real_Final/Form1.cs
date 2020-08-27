@@ -16,16 +16,16 @@ namespace Scapple_Real_Final
     {
         private XmlDocument doc;
         private string path;
-        private Dictionary<string, Button> buttons; //记录新增的<Note>
+        private Dictionary<string, TextBox> textBoxs; //记录新增的<Note>
         private bool isMouseDown = false;
         private Point mouseOffset; //记录鼠标指针的坐标
-        Button current_button;
+        TextBox current_textBox;
         int id = -1; //记录Note的ID，本程序为用户创建的Note自动分配ID
 
         public Form1()
         {
             InitializeComponent();
-            buttons = new Dictionary<string, Button>();
+            textBoxs = new Dictionary<string, TextBox>();
         }
 
         private void New_Click(object sender, EventArgs e)
@@ -243,6 +243,10 @@ namespace Scapple_Real_Final
 
         private void Save_Click(object sender, EventArgs e)
         {
+            //写Note
+
+
+
             if (path == null)
             {
                 SaveFileDialog saveFileDialog = new SaveFileDialog();
@@ -283,7 +287,7 @@ namespace Scapple_Real_Final
             }
         }
 
-        private void button_MouseDown(object sender, MouseEventArgs e)
+        private void textBox_MouseDown(object sender, MouseEventArgs e) //选中当前节点，屏幕显示当前节点的数据
         {
             if (e.Button == MouseButtons.Left)
             {
@@ -292,71 +296,65 @@ namespace Scapple_Real_Final
                 isMouseDown = true;
 
                 //跳转到当前节点
-                Button _button = (Button)sender;
-                current_button = buttons[_button.Name];
+                TextBox _textBox = (TextBox)sender;
+                current_textBox = textBoxs[_textBox.Name];
             }
         }
 
-        private void button_MouseMove(object sender, MouseEventArgs e)
+        private void textBox_MouseMove(object sender, MouseEventArgs e)
         {
             if (isMouseDown)
             {
-                int left = current_button.Left + e.X - mouseOffset.X;
-                int top = current_button.Top + e.Y - mouseOffset.Y;
-                current_button.Location = new Point(left, top);
+                int left = current_textBox.Left + e.X - mouseOffset.X;
+                int top = current_textBox.Top + e.Y - mouseOffset.Y;
+                current_textBox.Location = new Point(left, top);
             }
         }
 
-        private void button_MouseUp(object sender, MouseEventArgs e)
+        private void textBox_MouseUp(object sender, MouseEventArgs e)
         {
             if (e.Button == MouseButtons.Left)
             {
                 isMouseDown = false;
 
-                //将当前节点的Location信息写入XML文件
-                XmlNode scappleDocument = doc.SelectSingleNode("ScappleDocument");  //查找<ScappleDocument>
-                XmlNode notes = scappleDocument.SelectSingleNode("Notes");
-                //百度怎么修改xml一个节点的属性
-
-
+                //修改节点的位置信息
+                textBoxs[current_textBox.Name].Location = current_textBox.Location;
+                //MessageBox.Show(textBoxs[current_textBox.Name].Location.ToString());
 
 
             }
         }
 
-        private void button_MouseClick(object sender, MouseEventArgs e) //选中当前节点，屏幕显示当前节点的数据
+        private void textBox_TextChanged(object sender, EventArgs e)
         {
-            /*
-            Button _button = (Button)sender;
-            MessageBox.Show(_button.Name); //获取当前Button的名称
-            */
+            textBoxs[current_textBox.Name].Text = current_textBox.Text;
+            //MessageBox.Show(current_textBox.Text);
         }
 
-        private void button_MouseDoubleClick(object sender, MouseEventArgs e) //修改节点text
+        private void textBox_MouseClick(object sender, MouseEventArgs e)
         {
-
+            current_textBox.TextChanged += new EventHandler(textBox_TextChanged);
         }
 
         private void NewNote_Click(object sender, EventArgs e)
         {
-            current_button = new Button();
+            current_textBox = new TextBox();
             id += 1;
-            current_button.Text = "New Note";
-            current_button.Name = id.ToString(); //button的Name属性就是Note的id字符串
+            current_textBox.Text = "New Note";
+            current_textBox.Name = id.ToString(); //textBox的Name属性就是Note的id字符串
 
-            current_button.MouseDown += new MouseEventHandler(button_MouseDown);
-            current_button.MouseMove += new MouseEventHandler(button_MouseMove);
-            current_button.MouseUp += new MouseEventHandler(button_MouseUp);
-            current_button.MouseClick += new MouseEventHandler(button_MouseClick);
-            current_button.MouseDoubleClick += new MouseEventHandler(button_MouseDoubleClick);
+            current_textBox.MouseDown += new MouseEventHandler(textBox_MouseDown);
+            current_textBox.MouseMove += new MouseEventHandler(textBox_MouseMove);
+            current_textBox.MouseUp += new MouseEventHandler(textBox_MouseUp);
+            current_textBox.MouseClick += new MouseEventHandler(textBox_MouseClick);
 
-            current_button.Size = new System.Drawing.Size(66, 26);
-            current_button.Font = new Font("Tahoma", 12, FontStyle.Bold);
-            current_button.UseVisualStyleBackColor = true;
-            current_button.Location = new System.Drawing.Point(100, 100);
+            current_textBox.Size = new System.Drawing.Size(90, 26);
+            current_textBox.Font = new Font("Tahoma", 12, FontStyle.Bold);
+            current_textBox.Location = new System.Drawing.Point(100, 100);
+            current_textBox.TabStop = false;
 
-            this.Controls.Add(current_button);
-            buttons.Add(current_button.Name, current_button);
+            this.Controls.Add(current_textBox);
+            textBoxs.Add(current_textBox.Name, current_textBox);
 
 
             //在XML里新建节点
@@ -366,10 +364,10 @@ namespace Scapple_Real_Final
             XmlElement note = doc.CreateElement("Note"); //创建一个<Note>节点
 
             //设置该节点属性
-            note.SetAttribute("Width", current_button.Size.Width.ToString());
-            note.SetAttribute("FontSize", current_button.Font.Size.ToString());
-            note.SetAttribute("ID", current_button.Name);
-            note.SetAttribute("Position", current_button.Location.X.ToString()+","+ current_button.Location.Y.ToString());
+            note.SetAttribute("Width", current_textBox.Size.Width.ToString());
+            note.SetAttribute("FontSize", current_textBox.Font.Size.ToString());
+            note.SetAttribute("ID", current_textBox.Name);
+            note.SetAttribute("Position", current_textBox.Location.X.ToString()+","+ current_textBox.Location.Y.ToString());
 
             XmlElement appearance = doc.CreateElement("Appearance");
 
@@ -384,7 +382,7 @@ namespace Scapple_Real_Final
             appearance.AppendChild(border);
 
             XmlElement _string = doc.CreateElement("String");
-            _string.InnerText = current_button.Text;
+            _string.InnerText = current_textBox.Text;
 
             XmlElement connectedNoteIDs = doc.CreateElement("ConnectedNoteIDs");
             connectedNoteIDs.InnerText = "";
