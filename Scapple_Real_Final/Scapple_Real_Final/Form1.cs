@@ -16,11 +16,12 @@ namespace Scapple_Real_Final
     {
         private XmlDocument doc;
         private string path;
-        private Dictionary<string, TextBox> textBoxs; //记录新增的<Note>
+        private Dictionary<string, TextBox> textBoxs; //记录新增的<Note>，<id, Note>
         private bool isMouseDown = false;
         private Point mouseOffset; //记录鼠标指针的坐标
         TextBox current_textBox;
         int id = -1; //记录Note的ID，本程序为用户创建的Note自动分配ID
+        private Dictionary<int, ArrayList> connects; //记录节点间的关系，<id, connect_id>，为每个节点创建一个ArrayList，记录其关联节点的id
 
         public Form1()
         {
@@ -243,8 +244,46 @@ namespace Scapple_Real_Final
 
         private void Save_Click(object sender, EventArgs e)
         {
-            //写Note
+            //在XML里新建节点，写Note
+            XmlNode scappleDocument = doc.SelectSingleNode("ScappleDocument");  //查找<ScappleDocument>
+            XmlNode notes = scappleDocument.SelectSingleNode("Notes");
 
+            foreach (var item in textBoxs)
+            {
+                XmlElement note = doc.CreateElement("Note"); //创建一个<Note>节点
+
+                //设置该节点属性
+                note.SetAttribute("Width", item.Value.Size.Width.ToString());
+                note.SetAttribute("FontSize", item.Value.Font.Size.ToString());
+                note.SetAttribute("ID", item.Value.Name);
+                note.SetAttribute("Position", item.Value.Location.X.ToString() + "," + item.Value.Location.Y.ToString());
+
+                XmlElement appearance = doc.CreateElement("Appearance");
+
+                XmlElement alignment = doc.CreateElement("Alignment");
+                alignment.InnerText = "Left";
+
+                XmlElement border = doc.CreateElement("Border");
+                border.SetAttribute("Weight", "0");
+                border.SetAttribute("Style", "Rounded");
+
+                appearance.AppendChild(alignment); //添加到<Appearance>节点中
+                appearance.AppendChild(border);
+
+                XmlElement _string = doc.CreateElement("String");
+                _string.InnerText = item.Value.Text;
+
+                XmlElement connectedNoteIDs = doc.CreateElement("ConnectedNoteIDs");
+                connectedNoteIDs.InnerText = "";
+
+                note.AppendChild(appearance);
+                note.AppendChild(_string);
+                note.AppendChild(connectedNoteIDs);
+
+                notes.AppendChild(note);
+            }
+
+            scappleDocument.AppendChild(notes);
 
 
             if (path == null)
@@ -298,6 +337,9 @@ namespace Scapple_Real_Final
                 //跳转到当前节点
                 TextBox _textBox = (TextBox)sender;
                 current_textBox = textBoxs[_textBox.Name];
+
+                //显示当前节点的Position
+                label_Location.Text = current_textBox.Location.ToString();
             }
         }
 
@@ -308,6 +350,7 @@ namespace Scapple_Real_Final
                 int left = current_textBox.Left + e.X - mouseOffset.X;
                 int top = current_textBox.Top + e.Y - mouseOffset.Y;
                 current_textBox.Location = new Point(left, top);
+                label_Location.Text = current_textBox.Location.ToString();
             }
         }
 
@@ -320,7 +363,8 @@ namespace Scapple_Real_Final
                 //修改节点的位置信息
                 textBoxs[current_textBox.Name].Location = current_textBox.Location;
                 //MessageBox.Show(textBoxs[current_textBox.Name].Location.ToString());
-
+                
+                label_Location.Text = current_textBox.Location.ToString();
 
             }
         }
@@ -330,12 +374,7 @@ namespace Scapple_Real_Final
             textBoxs[current_textBox.Name].Text = current_textBox.Text;
             //MessageBox.Show(current_textBox.Text);
         }
-
-        private void textBox_MouseClick(object sender, MouseEventArgs e)
-        {
-            current_textBox.TextChanged += new EventHandler(textBox_TextChanged);
-        }
-
+        
         private void NewNote_Click(object sender, EventArgs e)
         {
             current_textBox = new TextBox();
@@ -346,54 +385,17 @@ namespace Scapple_Real_Final
             current_textBox.MouseDown += new MouseEventHandler(textBox_MouseDown);
             current_textBox.MouseMove += new MouseEventHandler(textBox_MouseMove);
             current_textBox.MouseUp += new MouseEventHandler(textBox_MouseUp);
-            current_textBox.MouseClick += new MouseEventHandler(textBox_MouseClick);
+            current_textBox.TextChanged += new EventHandler(textBox_TextChanged);
 
             current_textBox.Size = new System.Drawing.Size(90, 26);
             current_textBox.Font = new Font("Tahoma", 12, FontStyle.Bold);
-            current_textBox.Location = new System.Drawing.Point(100, 100);
+            current_textBox.Location = new System.Drawing.Point(150, 150);
             current_textBox.TabStop = false;
+            
+            label_Location.Text = current_textBox.Location.ToString();
 
             this.Controls.Add(current_textBox);
             textBoxs.Add(current_textBox.Name, current_textBox);
-
-
-            //在XML里新建节点
-            XmlNode scappleDocument = doc.SelectSingleNode("ScappleDocument");  //查找<ScappleDocument>
-            XmlNode notes = scappleDocument.SelectSingleNode("Notes");
-
-            XmlElement note = doc.CreateElement("Note"); //创建一个<Note>节点
-
-            //设置该节点属性
-            note.SetAttribute("Width", current_textBox.Size.Width.ToString());
-            note.SetAttribute("FontSize", current_textBox.Font.Size.ToString());
-            note.SetAttribute("ID", current_textBox.Name);
-            note.SetAttribute("Position", current_textBox.Location.X.ToString()+","+ current_textBox.Location.Y.ToString());
-
-            XmlElement appearance = doc.CreateElement("Appearance");
-
-            XmlElement alignment = doc.CreateElement("Alignment");
-            alignment.InnerText = "Left"; //设置文本节点
-
-            XmlElement border = doc.CreateElement("Border");
-            border.SetAttribute("Weight", "0");
-            border.SetAttribute("Style", "Rounded");
-
-            appearance.AppendChild(alignment); //添加到<Appearance>节点中
-            appearance.AppendChild(border);
-
-            XmlElement _string = doc.CreateElement("String");
-            _string.InnerText = current_textBox.Text;
-
-            XmlElement connectedNoteIDs = doc.CreateElement("ConnectedNoteIDs");
-            connectedNoteIDs.InnerText = "";
-
-            note.AppendChild(appearance);
-            note.AppendChild(_string);
-            note.AppendChild(connectedNoteIDs);
-
-            notes.AppendChild(note);
-            scappleDocument.AppendChild(notes);
-
         }
     }
 }
