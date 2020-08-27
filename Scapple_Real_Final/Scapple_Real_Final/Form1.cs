@@ -21,12 +21,19 @@ namespace Scapple_Real_Final
         private Point mouseOffset; //记录鼠标指针的坐标
         TextBox current_textBox;
         int id = -1; //记录Note的ID，本程序为用户创建的Note自动分配ID
-        private Dictionary<int, ArrayList> connects; //记录节点间的关系，<id, connect_id>，为每个节点创建一个ArrayList，记录其关联节点的id
+        FontDialog fontDialog; //字体设置框
+        private Dictionary<string, ArrayList> connects; //记录节点间的关系，<id, connect_id>，为每个节点创建一个ArrayList，记录其关联节点的id
+        Pen pen; //用于绘制链接两个Note的线
 
         public Form1()
         {
             InitializeComponent();
             textBoxs = new Dictionary<string, TextBox>();
+            fontDialog = new FontDialog();
+            connects = new Dictionary<string, ArrayList>();
+
+            Pen pen = new Pen(Color.Black, 5);
+
         }
 
         private void New_Click(object sender, EventArgs e)
@@ -274,7 +281,7 @@ namespace Scapple_Real_Final
                 _string.InnerText = item.Value.Text;
 
                 XmlElement connectedNoteIDs = doc.CreateElement("ConnectedNoteIDs");
-                connectedNoteIDs.InnerText = "";
+                connectedNoteIDs.InnerText = string.Join(",", connects[item.Key].ToArray());
 
                 note.AppendChild(appearance);
                 note.AppendChild(_string);
@@ -374,28 +381,72 @@ namespace Scapple_Real_Final
             textBoxs[current_textBox.Name].Text = current_textBox.Text;
             //MessageBox.Show(current_textBox.Text);
         }
-        
+
+        private void Font_Click(object sender, EventArgs e)
+        {
+            fontDialog.ShowColor = true;
+            fontDialog.ShowDialog();
+
+            current_textBox.Font = fontDialog.Font;
+            current_textBox.ForeColor = fontDialog.Color;
+        }
+
         private void NewNote_Click(object sender, EventArgs e)
         {
             current_textBox = new TextBox();
             id += 1;
-            current_textBox.Text = "New Note";
             current_textBox.Name = id.ToString(); //textBox的Name属性就是Note的id字符串
+
+            //新建空关联节点ArrayList，并插入节点关系Dictionary
+            ArrayList array = new ArrayList();
+            connects.Add(current_textBox.Name, array);
+            current_textBox.Text = "New Note";
+            current_textBox.Size = new System.Drawing.Size(90, 26);
+            current_textBox.Font = new Font("Times New Roman", 12, FontStyle.Bold);
+            current_textBox.Location = new System.Drawing.Point(150, 150);
+            current_textBox.TabStop = false;
 
             current_textBox.MouseDown += new MouseEventHandler(textBox_MouseDown);
             current_textBox.MouseMove += new MouseEventHandler(textBox_MouseMove);
             current_textBox.MouseUp += new MouseEventHandler(textBox_MouseUp);
             current_textBox.TextChanged += new EventHandler(textBox_TextChanged);
-
-            current_textBox.Size = new System.Drawing.Size(90, 26);
-            current_textBox.Font = new Font("Tahoma", 12, FontStyle.Bold);
-            current_textBox.Location = new System.Drawing.Point(150, 150);
-            current_textBox.TabStop = false;
             
             label_Location.Text = current_textBox.Location.ToString();
 
             this.Controls.Add(current_textBox);
             textBoxs.Add(current_textBox.Name, current_textBox);
+        }
+        
+        private void OnLeft_Click(object sender, EventArgs e)
+        {
+            TextBox old_textBox = current_textBox;
+                
+            current_textBox = new TextBox();
+            id += 1;
+            current_textBox.Name = id.ToString(); //textBox的Name属性就是Note的id字符串
+            current_textBox.Text = "New Note";
+            current_textBox.Size = new System.Drawing.Size(90, 26);
+            current_textBox.Font = new Font("Times New Roman", 12, FontStyle.Bold);
+            current_textBox.Location = new System.Drawing.Point(old_textBox.Location.X - 100, old_textBox.Location.Y);
+            current_textBox.TabStop = false;
+            
+            //新建空关联节点ArrayList，并插入节点关系Dictionary
+            ArrayList array = new ArrayList();
+            connects.Add(current_textBox.Name, array);
+
+            current_textBox.MouseDown += new MouseEventHandler(textBox_MouseDown);
+            current_textBox.MouseMove += new MouseEventHandler(textBox_MouseMove);
+            current_textBox.MouseUp += new MouseEventHandler(textBox_MouseUp);
+            current_textBox.TextChanged += new EventHandler(textBox_TextChanged);
+            
+            label_Location.Text = current_textBox.Location.ToString();
+
+            this.Controls.Add(current_textBox);
+            textBoxs.Add(current_textBox.Name, current_textBox);
+
+            connects[old_textBox.Name].Add(current_textBox.Name);
+            connects[current_textBox.Name].Add(old_textBox.Name);
+            
         }
     }
 }

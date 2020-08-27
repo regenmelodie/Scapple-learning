@@ -37,9 +37,14 @@
             this.SaveAs = new System.Windows.Forms.ToolStripMenuItem();
             this.Notes = new System.Windows.Forms.ToolStripMenuItem();
             this.NewNote = new System.Windows.Forms.ToolStripMenuItem();
+            this.Format = new System.Windows.Forms.ToolStripMenuItem();
+            this.Font = new System.Windows.Forms.ToolStripMenuItem();
             this.saveFileDialog = new System.Windows.Forms.SaveFileDialog();
             this.label1 = new System.Windows.Forms.Label();
             this.label_Location = new System.Windows.Forms.Label();
+            this.NewConnectedNote = new System.Windows.Forms.ToolStripMenuItem();
+            this.OnLeft = new System.Windows.Forms.ToolStripMenuItem();
+            this.OnRight = new System.Windows.Forms.ToolStripMenuItem();
             this.menuStrip1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -48,7 +53,8 @@
             this.menuStrip1.ImageScalingSize = new System.Drawing.Size(24, 24);
             this.menuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.File,
-            this.Notes});
+            this.Notes,
+            this.Format});
             this.menuStrip1.Location = new System.Drawing.Point(0, 0);
             this.menuStrip1.Name = "menuStrip1";
             this.menuStrip1.Size = new System.Drawing.Size(1295, 32);
@@ -103,7 +109,8 @@
             // Notes
             // 
             this.Notes.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.NewNote});
+            this.NewNote,
+            this.NewConnectedNote});
             this.Notes.Name = "Notes";
             this.Notes.Size = new System.Drawing.Size(73, 28);
             this.Notes.Text = "Notes";
@@ -111,9 +118,24 @@
             // NewNote
             // 
             this.NewNote.Name = "NewNote";
-            this.NewNote.Size = new System.Drawing.Size(179, 30);
+            this.NewNote.Size = new System.Drawing.Size(277, 30);
             this.NewNote.Text = "New Note";
             this.NewNote.Click += new System.EventHandler(this.NewNote_Click);
+            // 
+            // Format
+            // 
+            this.Format.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.Font});
+            this.Format.Name = "Format";
+            this.Format.Size = new System.Drawing.Size(84, 28);
+            this.Format.Text = "Format";
+            // 
+            // Font
+            // 
+            this.Font.Name = "Font";
+            this.Font.Size = new System.Drawing.Size(131, 30);
+            this.Font.Text = "Font";
+            this.Font.Click += new System.EventHandler(this.Font_Click);
             // 
             // label1
             // 
@@ -133,6 +155,28 @@
             this.label_Location.Size = new System.Drawing.Size(89, 18);
             this.label_Location.TabIndex = 3;
             this.label_Location.Text = "         ";
+            // 
+            // NewConnectedNote
+            // 
+            this.NewConnectedNote.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.OnLeft,
+            this.OnRight});
+            this.NewConnectedNote.Name = "NewConnectedNote";
+            this.NewConnectedNote.Size = new System.Drawing.Size(277, 30);
+            this.NewConnectedNote.Text = "New Connected Note";
+            // 
+            // OnLeft
+            // 
+            this.OnLeft.Name = "OnLeft";
+            this.OnLeft.Size = new System.Drawing.Size(252, 30);
+            this.OnLeft.Text = "On Left";
+            this.OnLeft.Click += new System.EventHandler(this.OnLeft_Click);
+            // 
+            // OnRight
+            // 
+            this.OnRight.Name = "OnRight";
+            this.OnRight.Size = new System.Drawing.Size(252, 30);
+            this.OnRight.Text = "On Right";
             // 
             // Form1
             // 
@@ -165,6 +209,11 @@
         private System.Windows.Forms.ToolStripMenuItem NewNote;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.Label label_Location;
+        private System.Windows.Forms.ToolStripMenuItem Format;
+        private System.Windows.Forms.ToolStripMenuItem Font;
+        private System.Windows.Forms.ToolStripMenuItem NewConnectedNote;
+        private System.Windows.Forms.ToolStripMenuItem OnLeft;
+        private System.Windows.Forms.ToolStripMenuItem OnRight;
     }
 }
 
