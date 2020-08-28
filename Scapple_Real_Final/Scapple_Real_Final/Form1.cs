@@ -23,17 +23,19 @@ namespace Scapple_Real_Final
         int id = -1; //记录Note的ID，本程序为用户创建的Note自动分配ID
         FontDialog fontDialog; //字体设置框
         private Dictionary<string, ArrayList> connects; //记录节点间的关系，<id, connect_id>，为每个节点创建一个ArrayList，记录其关联节点的id
-        Pen pen; //用于绘制链接两个Note的线
+        Graphics g; //画布
+        Pen pen;
 
         public Form1()
         {
             InitializeComponent();
             textBoxs = new Dictionary<string, TextBox>();
             fontDialog = new FontDialog();
-            connects = new Dictionary<string, ArrayList>();
-
-            Pen pen = new Pen(Color.Black, 5);
-
+            connects = new Dictionary<string, ArrayList>();   
+            
+            g = Graphics.FromHwnd(this.Handle);
+            pen = new Pen(Color.Gray, 1);
+            pen.DashStyle = System.Drawing.Drawing2D.DashStyle.Dot;
         }
 
         private void New_Click(object sender, EventArgs e)
@@ -358,6 +360,23 @@ namespace Scapple_Real_Final
                 int top = current_textBox.Top + e.Y - mouseOffset.Y;
                 current_textBox.Location = new Point(left, top);
                 label_Location.Text = current_textBox.Location.ToString();
+                
+                g.Clear(this.BackColor);
+                foreach (var item in connects)
+                {
+                    foreach (object o in item.Value)
+                    {
+                        Point a = new Point();
+                        Point b = new Point();
+                        a.X = textBoxs[item.Key].Location.X + textBoxs[item.Key].Size.Width / 2;
+                        a.Y = textBoxs[item.Key].Location.Y + textBoxs[item.Key].Size.Height / 2;
+                        b.X = textBoxs[o.ToString()].Location.X + textBoxs[o.ToString()].Size.Width / 2;
+                        b.Y = textBoxs[o.ToString()].Location.Y + textBoxs[o.ToString()].Size.Height / 2;
+                        g.DrawLine(pen, a, b);
+                    }
+                    
+                }
+
             }
         }
 
@@ -401,7 +420,7 @@ namespace Scapple_Real_Final
             ArrayList array = new ArrayList();
             connects.Add(current_textBox.Name, array);
             current_textBox.Text = "New Note";
-            current_textBox.Size = new System.Drawing.Size(90, 26);
+            current_textBox.Size = new System.Drawing.Size(75, 26);
             current_textBox.Font = new Font("Times New Roman", 12, FontStyle.Bold);
             current_textBox.Location = new System.Drawing.Point(150, 150);
             current_textBox.TabStop = false;
@@ -446,7 +465,23 @@ namespace Scapple_Real_Final
 
             connects[old_textBox.Name].Add(current_textBox.Name);
             connects[current_textBox.Name].Add(old_textBox.Name);
-            
+
+            g.Clear(this.BackColor);
+            foreach (var item in connects)
+            {
+                foreach (object o in item.Value)
+                {
+                    Point a = new Point();
+                    Point b = new Point();
+                    a.X = textBoxs[item.Key].Location.X + textBoxs[item.Key].Size.Width/2;
+                    a.Y = textBoxs[item.Key].Location.Y + textBoxs[item.Key].Size.Height/2;
+                    b.X = textBoxs[o.ToString()].Location.X + textBoxs[o.ToString()].Size.Width/2;
+                    b.Y = textBoxs[o.ToString()].Location.Y + textBoxs[o.ToString()].Size.Height/2;
+                    g.DrawLine(pen, a, b);
+                }
+
+            }
+
         }
     }
 }
