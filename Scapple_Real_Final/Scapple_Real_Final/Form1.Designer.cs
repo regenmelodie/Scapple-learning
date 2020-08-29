@@ -37,14 +37,14 @@
             this.SaveAs = new System.Windows.Forms.ToolStripMenuItem();
             this.Notes = new System.Windows.Forms.ToolStripMenuItem();
             this.NewNote = new System.Windows.Forms.ToolStripMenuItem();
+            this.NewConnectedNote = new System.Windows.Forms.ToolStripMenuItem();
+            this.OnLeft = new System.Windows.Forms.ToolStripMenuItem();
+            this.OnRight = new System.Windows.Forms.ToolStripMenuItem();
             this.Format = new System.Windows.Forms.ToolStripMenuItem();
             this.Font = new System.Windows.Forms.ToolStripMenuItem();
             this.saveFileDialog = new System.Windows.Forms.SaveFileDialog();
             this.label1 = new System.Windows.Forms.Label();
             this.label_Location = new System.Windows.Forms.Label();
-            this.NewConnectedNote = new System.Windows.Forms.ToolStripMenuItem();
-            this.OnLeft = new System.Windows.Forms.ToolStripMenuItem();
-            this.OnRight = new System.Windows.Forms.ToolStripMenuItem();
             this.menuStrip1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -57,7 +57,7 @@
             this.Format});
             this.menuStrip1.Location = new System.Drawing.Point(0, 0);
             this.menuStrip1.Name = "menuStrip1";
-            this.menuStrip1.Size = new System.Drawing.Size(1295, 32);
+            this.menuStrip1.Size = new System.Drawing.Size(1320, 32);
             this.menuStrip1.TabIndex = 0;
             this.menuStrip1.Text = "menuStrip1";
             // 
@@ -122,6 +122,28 @@
             this.NewNote.Text = "New Note";
             this.NewNote.Click += new System.EventHandler(this.NewNote_Click);
             // 
+            // NewConnectedNote
+            // 
+            this.NewConnectedNote.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.OnLeft,
+            this.OnRight});
+            this.NewConnectedNote.Name = "NewConnectedNote";
+            this.NewConnectedNote.Size = new System.Drawing.Size(277, 30);
+            this.NewConnectedNote.Text = "New Connected Note";
+            // 
+            // OnLeft
+            // 
+            this.OnLeft.Name = "OnLeft";
+            this.OnLeft.Size = new System.Drawing.Size(170, 30);
+            this.OnLeft.Text = "On Left";
+            this.OnLeft.Click += new System.EventHandler(this.OnLeft_Click);
+            // 
+            // OnRight
+            // 
+            this.OnRight.Name = "OnRight";
+            this.OnRight.Size = new System.Drawing.Size(170, 30);
+            this.OnRight.Text = "On Right";
+            // 
             // Format
             // 
             this.Format.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
@@ -156,33 +178,11 @@
             this.label_Location.TabIndex = 3;
             this.label_Location.Text = "         ";
             // 
-            // NewConnectedNote
-            // 
-            this.NewConnectedNote.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.OnLeft,
-            this.OnRight});
-            this.NewConnectedNote.Name = "NewConnectedNote";
-            this.NewConnectedNote.Size = new System.Drawing.Size(277, 30);
-            this.NewConnectedNote.Text = "New Connected Note";
-            // 
-            // OnLeft
-            // 
-            this.OnLeft.Name = "OnLeft";
-            this.OnLeft.Size = new System.Drawing.Size(252, 30);
-            this.OnLeft.Text = "On Left";
-            this.OnLeft.Click += new System.EventHandler(this.OnLeft_Click);
-            // 
-            // OnRight
-            // 
-            this.OnRight.Name = "OnRight";
-            this.OnRight.Size = new System.Drawing.Size(252, 30);
-            this.OnRight.Text = "On Right";
-            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 18F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1295, 735);
+            this.ClientSize = new System.Drawing.Size(1320, 748);
             this.Controls.Add(this.label_Location);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.menuStrip1);

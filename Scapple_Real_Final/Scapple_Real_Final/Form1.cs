@@ -19,12 +19,13 @@ namespace Scapple_Real_Final
         private Dictionary<string, TextBox> textBoxs; //记录新增的<Note>，<id, Note>
         private bool isMouseDown = false;
         private Point mouseOffset; //记录鼠标指针的坐标
-        TextBox current_textBox;
-        int id = -1; //记录Note的ID，本程序为用户创建的Note自动分配ID
-        FontDialog fontDialog; //字体设置框
+        private TextBox current_textBox;
+        private int id = -1; //记录Note的ID，本程序为用户创建的Note自动分配ID
+        private FontDialog fontDialog; //字体设置框
         private Dictionary<string, ArrayList> connects; //记录节点间的关系，<id, connect_id>，为每个节点创建一个ArrayList，记录其关联节点的id
-        Graphics g; //画布
-        Pen pen;
+        private Graphics g; //画布
+        private Pen pen;
+        private Label label; //在未新建文件时显示
 
         public Form1()
         {
@@ -36,10 +37,18 @@ namespace Scapple_Real_Final
             g = Graphics.FromHwnd(this.Handle);
             pen = new Pen(Color.Gray, 1);
             pen.DashStyle = System.Drawing.Drawing2D.DashStyle.Dot;
+            
+            label = new Label();
+            label.Text = "Please create a file.";
+            label.Location = new System.Drawing.Point(Screen.PrimaryScreen.WorkingArea.Width/4, Screen.PrimaryScreen.WorkingArea.Height/4);
+            label.Size = new Size(200, 30);
+            this.Controls.Add(label);
         }
 
         private void New_Click(object sender, EventArgs e)
         {
+            label.Hide();
+
             //创建XML文档
             doc = new XmlDocument();
             XmlDeclaration dec = doc.CreateXmlDeclaration("1.0", "UTF-8", "no");
@@ -272,11 +281,15 @@ namespace Scapple_Real_Final
                 XmlElement alignment = doc.CreateElement("Alignment");
                 alignment.InnerText = "Left";
 
+                XmlElement textColor = doc.CreateElement("TextColor");
+                textColor.InnerText = (item.Value.ForeColor.R / 255.0).ToString() + " " + (item.Value.ForeColor.G / 255.0).ToString() + " " + (item.Value.ForeColor.B / 255.0).ToString();
+
                 XmlElement border = doc.CreateElement("Border");
                 border.SetAttribute("Weight", "0");
                 border.SetAttribute("Style", "Rounded");
 
                 appearance.AppendChild(alignment); //添加到<Appearance>节点中
+                appearance.AppendChild(textColor);
                 appearance.AppendChild(border);
 
                 XmlElement _string = doc.CreateElement("String");
@@ -297,7 +310,7 @@ namespace Scapple_Real_Final
 
             if (path == null)
             {
-                SaveFileDialog saveFileDialog = new SaveFileDialog();
+                //SaveFileDialog saveFileDialog = new SaveFileDialog();
                 saveFileDialog.Filter = "Scapple File|*.scap"; //筛选：允许类型为.scap的文件
                 saveFileDialog.Title = "Save a Scapple File";
                 saveFileDialog.RestoreDirectory = true; //保存对话框是否记忆上次打开的目录
@@ -388,8 +401,6 @@ namespace Scapple_Real_Final
 
                 //修改节点的位置信息
                 textBoxs[current_textBox.Name].Location = current_textBox.Location;
-                //MessageBox.Show(textBoxs[current_textBox.Name].Location.ToString());
-                
                 label_Location.Text = current_textBox.Location.ToString();
 
             }
