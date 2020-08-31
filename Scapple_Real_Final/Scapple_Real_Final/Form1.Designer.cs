@@ -28,7 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.menuStrip1 = new System.Windows.Forms.MenuStrip();
+            this.menuStrip = new System.Windows.Forms.MenuStrip();
             this.File = new System.Windows.Forms.ToolStripMenuItem();
             this.New = new System.Windows.Forms.ToolStripMenuItem();
             this.ToolStripMenuItem2 = new System.Windows.Forms.ToolStripMenuItem();
@@ -45,21 +45,24 @@
             this.saveFileDialog = new System.Windows.Forms.SaveFileDialog();
             this.label1 = new System.Windows.Forms.Label();
             this.label_Location = new System.Windows.Forms.Label();
-            this.menuStrip1.SuspendLayout();
+            this.Colors = new System.Windows.Forms.ToolStripMenuItem();
+            this.ChangeTextColor = new System.Windows.Forms.ToolStripMenuItem();
+            this.colorDialog = new System.Windows.Forms.ColorDialog();
+            this.menuStrip.SuspendLayout();
             this.SuspendLayout();
             // 
-            // menuStrip1
+            // menuStrip
             // 
-            this.menuStrip1.ImageScalingSize = new System.Drawing.Size(24, 24);
-            this.menuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.menuStrip.ImageScalingSize = new System.Drawing.Size(24, 24);
+            this.menuStrip.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.File,
             this.Notes,
             this.Format});
-            this.menuStrip1.Location = new System.Drawing.Point(0, 0);
-            this.menuStrip1.Name = "menuStrip1";
-            this.menuStrip1.Size = new System.Drawing.Size(1320, 32);
-            this.menuStrip1.TabIndex = 0;
-            this.menuStrip1.Text = "menuStrip1";
+            this.menuStrip.Location = new System.Drawing.Point(0, 0);
+            this.menuStrip.Name = "menuStrip";
+            this.menuStrip.Size = new System.Drawing.Size(1320, 32);
+            this.menuStrip.TabIndex = 0;
+            this.menuStrip.Text = "menuStrip1";
             // 
             // File
             // 
@@ -134,20 +137,21 @@
             // OnLeft
             // 
             this.OnLeft.Name = "OnLeft";
-            this.OnLeft.Size = new System.Drawing.Size(170, 30);
+            this.OnLeft.Size = new System.Drawing.Size(252, 30);
             this.OnLeft.Text = "On Left";
             this.OnLeft.Click += new System.EventHandler(this.OnLeft_Click);
             // 
             // OnRight
             // 
             this.OnRight.Name = "OnRight";
-            this.OnRight.Size = new System.Drawing.Size(170, 30);
+            this.OnRight.Size = new System.Drawing.Size(252, 30);
             this.OnRight.Text = "On Right";
             // 
             // Format
             // 
             this.Format.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.Font});
+            this.Font,
+            this.Colors});
             this.Format.Name = "Format";
             this.Format.Size = new System.Drawing.Size(84, 28);
             this.Format.Text = "Format";
@@ -155,7 +159,7 @@
             // Font
             // 
             this.Font.Name = "Font";
-            this.Font.Size = new System.Drawing.Size(131, 30);
+            this.Font.Size = new System.Drawing.Size(252, 30);
             this.Font.Text = "Font";
             this.Font.Click += new System.EventHandler(this.Font_Click);
             // 
@@ -178,6 +182,21 @@
             this.label_Location.TabIndex = 3;
             this.label_Location.Text = "         ";
             // 
+            // Colors
+            // 
+            this.Colors.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.ChangeTextColor});
+            this.Colors.Name = "Colors";
+            this.Colors.Size = new System.Drawing.Size(252, 30);
+            this.Colors.Text = "Colors";
+            // 
+            // ChangeTextColor
+            // 
+            this.ChangeTextColor.Name = "ChangeTextColor";
+            this.ChangeTextColor.Size = new System.Drawing.Size(252, 30);
+            this.ChangeTextColor.Text = "Change Text Color";
+            this.ChangeTextColor.Click += new System.EventHandler(this.ChangeTextColor_Click);
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 18F);
@@ -185,11 +204,11 @@
             this.ClientSize = new System.Drawing.Size(1320, 748);
             this.Controls.Add(this.label_Location);
             this.Controls.Add(this.label1);
-            this.Controls.Add(this.menuStrip1);
+            this.Controls.Add(this.menuStrip);
             this.Name = "Form1";
             this.Text = "Scapple";
-            this.menuStrip1.ResumeLayout(false);
-            this.menuStrip1.PerformLayout();
+            this.menuStrip.ResumeLayout(false);
+            this.menuStrip.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -197,7 +216,7 @@
 
         #endregion
 
-        private System.Windows.Forms.MenuStrip menuStrip1;
+        private System.Windows.Forms.MenuStrip menuStrip;
         private System.Windows.Forms.ToolStripMenuItem File;
         private System.Windows.Forms.ToolStripMenuItem New;
         private System.Windows.Forms.ToolStripMenuItem ToolStripMenuItem2;
@@ -214,6 +233,9 @@
         private System.Windows.Forms.ToolStripMenuItem NewConnectedNote;
         private System.Windows.Forms.ToolStripMenuItem OnLeft;
         private System.Windows.Forms.ToolStripMenuItem OnRight;
+        private System.Windows.Forms.ToolStripMenuItem Colors;
+        private System.Windows.Forms.ToolStripMenuItem ChangeTextColor;
+        private System.Windows.Forms.ColorDialog colorDialog;
     }
 }
 

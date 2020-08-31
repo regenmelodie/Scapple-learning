@@ -260,7 +260,24 @@ namespace Scapple_Real_Final
             scappleDocument.AppendChild(printSettings);
         }
 
-        private void Save_Click(object sender, EventArgs e)
+        private void choose_path()
+        {
+            //SaveFileDialog saveFileDialog = new SaveFileDialog();
+            saveFileDialog.Filter = "Scapple File|*.scap"; //筛选：允许类型为.scap的文件
+            saveFileDialog.Title = "Save a Scapple File";
+            saveFileDialog.RestoreDirectory = true; //保存对话框是否记忆上次打开的目录
+            saveFileDialog.CheckPathExists = true; //检查目录
+            saveFileDialog.FileName = "Untitled"; //设置默认文件名
+
+            if (saveFileDialog.ShowDialog() == DialogResult.OK)
+            {
+                path = saveFileDialog.FileName;
+                doc.Save(path);
+                MessageBox.Show(this, "保存成功！", "提示");
+            }
+        }
+
+        private void add_note()
         {
             //在XML里新建节点，写Note
             XmlNode scappleDocument = doc.SelectSingleNode("ScappleDocument");  //查找<ScappleDocument>
@@ -268,7 +285,7 @@ namespace Scapple_Real_Final
 
             //清空<Notes>的子节点
             notes.RemoveAll();
-            
+
             //创建<Note>节点
             foreach (var item in textBoxs)
             {
@@ -296,8 +313,8 @@ namespace Scapple_Real_Final
                 else g = Math.Round(_g, 6, MidpointRounding.ToEven).ToString();
                 if (_b == (int)_b) b = _b.ToString() + ".0";
                 else b = Math.Round(_b, 6, MidpointRounding.ToEven).ToString();
-                textColor.InnerText =  r + " " + g + " " + b;
-                
+                textColor.InnerText = r + " " + g + " " + b;
+
                 XmlElement border = doc.CreateElement("Border");
                 border.SetAttribute("Weight", "0");
                 border.SetAttribute("Style", "Rounded");
@@ -320,23 +337,15 @@ namespace Scapple_Real_Final
             }
 
             scappleDocument.AppendChild(notes);
+        }
 
+        private void Save_Click(object sender, EventArgs e)
+        {
+            add_note();
 
             if (path == null)
             {
-                //SaveFileDialog saveFileDialog = new SaveFileDialog();
-                saveFileDialog.Filter = "Scapple File|*.scap"; //筛选：允许类型为.scap的文件
-                saveFileDialog.Title = "Save a Scapple File";
-                saveFileDialog.RestoreDirectory = true; //保存对话框是否记忆上次打开的目录
-                saveFileDialog.CheckPathExists = true; //检查目录
-                saveFileDialog.FileName = "Untitled"; //设置默认文件名
-
-                if (saveFileDialog.ShowDialog() == DialogResult.OK)
-                {
-                    path = saveFileDialog.FileName;
-                    doc.Save(path);
-                    MessageBox.Show(this, "保存成功！", "提示");
-                }
+                choose_path();
             }
             else
             {
@@ -347,19 +356,8 @@ namespace Scapple_Real_Final
 
         private void SaveAs_Click(object sender, EventArgs e)
         {
-            SaveFileDialog saveFileDialog = new SaveFileDialog();
-            saveFileDialog.Filter = "Scapple File|*.scap"; //筛选：允许类型为.scap的文件
-            saveFileDialog.Title = "Save a Scapple File";
-            saveFileDialog.RestoreDirectory = true; //保存对话框是否记忆上次打开的目录
-            saveFileDialog.CheckPathExists = true; //检查目录
-            saveFileDialog.FileName = "Untitled"; //设置默认文件名
-            
-            if (saveFileDialog.ShowDialog() == DialogResult.OK)
-            {
-                path = saveFileDialog.FileName;
-                doc.Save(path);
-                MessageBox.Show(this, "保存成功！", "提示");
-            }
+            add_note();
+            choose_path();
         }
 
         private void textBox_MouseDown(object sender, MouseEventArgs e) //选中当前节点，屏幕显示当前节点的数据
@@ -388,22 +386,7 @@ namespace Scapple_Real_Final
                 current_textBox.Location = new Point(left, top);
                 label_Location.Text = current_textBox.Location.ToString();
                 
-                g.Clear(this.BackColor);
-                foreach (var item in connects)
-                {
-                    foreach (object o in item.Value)
-                    {
-                        Point a = new Point();
-                        Point b = new Point();
-                        a.X = textBoxs[item.Key].Location.X + textBoxs[item.Key].Size.Width / 2;
-                        a.Y = textBoxs[item.Key].Location.Y + textBoxs[item.Key].Size.Height / 2;
-                        b.X = textBoxs[o.ToString()].Location.X + textBoxs[o.ToString()].Size.Width / 2;
-                        b.Y = textBoxs[o.ToString()].Location.Y + textBoxs[o.ToString()].Size.Height / 2;
-                        g.DrawLine(pen, a, b);
-                    }
-                    
-                }
-
+                draw_line();
             }
         }
 
@@ -428,88 +411,81 @@ namespace Scapple_Real_Final
 
         private void Font_Click(object sender, EventArgs e)
         {
-            fontDialog.ShowColor = true;
             fontDialog.ShowDialog();
 
             current_textBox.Font = fontDialog.Font;
-            current_textBox.ForeColor = fontDialog.Color;
             textBoxs[current_textBox.Name].Font = current_textBox.Font;
-            textBoxs[current_textBox.Name].ForeColor = current_textBox.ForeColor;
-            //MessageBox.Show(textBoxs[current_textBox.Name].ForeColor.ToString());
         }
 
-        private void NewNote_Click(object sender, EventArgs e)
+        private void draw_line()
         {
-            current_textBox = new TextBox();
-            id += 1;
-            current_textBox.Name = id.ToString(); //textBox的Name属性就是Note的id字符串
-
-            //新建空关联节点ArrayList，并插入节点关系Dictionary
-            ArrayList array = new ArrayList();
-            connects.Add(current_textBox.Name, array);
-            current_textBox.Text = "New Note";
-            current_textBox.Size = new System.Drawing.Size(75, 26);
-            current_textBox.Font = new Font("Times New Roman", 12, FontStyle.Bold);
-            current_textBox.Location = new System.Drawing.Point(150, 150);
-            current_textBox.TabStop = false;
-
-            current_textBox.MouseDown += new MouseEventHandler(textBox_MouseDown);
-            current_textBox.MouseMove += new MouseEventHandler(textBox_MouseMove);
-            current_textBox.MouseUp += new MouseEventHandler(textBox_MouseUp);
-            current_textBox.TextChanged += new EventHandler(textBox_TextChanged);
-            
-            label_Location.Text = current_textBox.Location.ToString();
-
-            this.Controls.Add(current_textBox);
-            textBoxs.Add(current_textBox.Name, current_textBox);
-        }
-        
-        private void OnLeft_Click(object sender, EventArgs e)
-        {
-            TextBox old_textBox = current_textBox;
-                
-            current_textBox = new TextBox();
-            id += 1;
-            current_textBox.Name = id.ToString(); //textBox的Name属性就是Note的id字符串
-            current_textBox.Text = "New Note";
-            current_textBox.Size = new System.Drawing.Size(90, 26);
-            current_textBox.Font = new Font("Times New Roman", 12, FontStyle.Bold);
-            current_textBox.Location = new System.Drawing.Point(old_textBox.Location.X - 100, old_textBox.Location.Y);
-            current_textBox.TabStop = false;
-            
-            //新建空关联节点ArrayList，并插入节点关系Dictionary
-            ArrayList array = new ArrayList();
-            connects.Add(current_textBox.Name, array);
-
-            current_textBox.MouseDown += new MouseEventHandler(textBox_MouseDown);
-            current_textBox.MouseMove += new MouseEventHandler(textBox_MouseMove);
-            current_textBox.MouseUp += new MouseEventHandler(textBox_MouseUp);
-            current_textBox.TextChanged += new EventHandler(textBox_TextChanged);
-            
-            label_Location.Text = current_textBox.Location.ToString();
-
-            this.Controls.Add(current_textBox);
-            textBoxs.Add(current_textBox.Name, current_textBox);
-
-            connects[old_textBox.Name].Add(current_textBox.Name);
-            connects[current_textBox.Name].Add(old_textBox.Name);
-
             g.Clear(this.BackColor);
+
             foreach (var item in connects)
             {
                 foreach (object o in item.Value)
                 {
                     Point a = new Point();
                     Point b = new Point();
-                    a.X = textBoxs[item.Key].Location.X + textBoxs[item.Key].Size.Width/2;
-                    a.Y = textBoxs[item.Key].Location.Y + textBoxs[item.Key].Size.Height/2;
-                    b.X = textBoxs[o.ToString()].Location.X + textBoxs[o.ToString()].Size.Width/2;
-                    b.Y = textBoxs[o.ToString()].Location.Y + textBoxs[o.ToString()].Size.Height/2;
+                    a.X = textBoxs[item.Key].Location.X + textBoxs[item.Key].Size.Width / 2;
+                    a.Y = textBoxs[item.Key].Location.Y + textBoxs[item.Key].Size.Height / 2;
+                    b.X = textBoxs[o.ToString()].Location.X + textBoxs[o.ToString()].Size.Width / 2;
+                    b.Y = textBoxs[o.ToString()].Location.Y + textBoxs[o.ToString()].Size.Height / 2;
                     g.DrawLine(pen, a, b);
                 }
 
             }
+        }
 
+        private void new_note(int location_x, int location_y)
+        {
+            current_textBox = new TextBox();
+            id += 1;
+            current_textBox.Name = id.ToString(); //textBox的Name属性就是Note的id字符串
+            current_textBox.Text = "New Note";
+            current_textBox.Size = new System.Drawing.Size(90, 26);
+            current_textBox.Font = new Font("Times New Roman", 12, FontStyle.Bold);
+            current_textBox.Location = new System.Drawing.Point(location_x, location_y);
+            current_textBox.TabStop = false;
+
+            //新建空关联节点ArrayList，并插入节点关系Dictionary
+            ArrayList array = new ArrayList();
+            connects.Add(current_textBox.Name, array);
+
+            current_textBox.MouseDown += new MouseEventHandler(textBox_MouseDown);
+            current_textBox.MouseMove += new MouseEventHandler(textBox_MouseMove);
+            current_textBox.MouseUp += new MouseEventHandler(textBox_MouseUp);
+            current_textBox.TextChanged += new EventHandler(textBox_TextChanged);
+
+            label_Location.Text = current_textBox.Location.ToString();
+
+            this.Controls.Add(current_textBox);
+            textBoxs.Add(current_textBox.Name, current_textBox);
+        }
+
+        private void NewNote_Click(object sender, EventArgs e)
+        {
+            new_note(150, 150);
+            current_textBox.Location = new System.Drawing.Point(150, 150);
+        }
+
+        private void OnLeft_Click(object sender, EventArgs e)
+        {
+            TextBox old_textBox = current_textBox;
+
+            new_note(old_textBox.Location.X - 100, old_textBox.Location.Y);
+            
+            connects[old_textBox.Name].Add(current_textBox.Name);
+            connects[current_textBox.Name].Add(old_textBox.Name);
+            
+            draw_line();
+        }
+
+        private void ChangeTextColor_Click(object sender, EventArgs e)
+        {
+            colorDialog.ShowDialog();
+            current_textBox.ForeColor = colorDialog.Color;
+            textBoxs[current_textBox.Name].ForeColor = current_textBox.ForeColor;
         }
     }
 }
