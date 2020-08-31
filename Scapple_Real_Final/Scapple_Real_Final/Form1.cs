@@ -282,8 +282,18 @@ namespace Scapple_Real_Final
                 alignment.InnerText = "Left";
 
                 XmlElement textColor = doc.CreateElement("TextColor");
-                textColor.InnerText = (item.Value.ForeColor.R / 255.0).ToString() + " " + (item.Value.ForeColor.G / 255.0).ToString() + " " + (item.Value.ForeColor.B / 255.0).ToString();
-
+                decimal _r = (decimal)item.Value.ForeColor.R / 255;
+                decimal _g = (decimal)item.Value.ForeColor.G / 255;
+                decimal _b = (decimal)item.Value.ForeColor.B / 255;
+                string r, g, b;
+                if (_r == (int)_r) r = _r.ToString() + ".0";
+                else r = Math.Round(_r, 6, MidpointRounding.ToEven).ToString();
+                if (_g == (int)_g) g = _g.ToString() + ".0";
+                else g = Math.Round(_g, 6, MidpointRounding.ToEven).ToString();
+                if (_b == (int)_b) b = _b.ToString() + ".0";
+                else b = Math.Round(_b, 6, MidpointRounding.ToEven).ToString();
+                textColor.InnerText =  r + " " + g + " " + b;
+                
                 XmlElement border = doc.CreateElement("Border");
                 border.SetAttribute("Weight", "0");
                 border.SetAttribute("Style", "Rounded");
@@ -419,6 +429,9 @@ namespace Scapple_Real_Final
 
             current_textBox.Font = fontDialog.Font;
             current_textBox.ForeColor = fontDialog.Color;
+            textBoxs[current_textBox.Name].Font = current_textBox.Font;
+            textBoxs[current_textBox.Name].ForeColor = current_textBox.ForeColor;
+            //MessageBox.Show(textBoxs[current_textBox.Name].ForeColor.ToString());
         }
 
         private void NewNote_Click(object sender, EventArgs e)
