@@ -266,6 +266,10 @@ namespace Scapple_Real_Final
             XmlNode scappleDocument = doc.SelectSingleNode("ScappleDocument");  //查找<ScappleDocument>
             XmlNode notes = scappleDocument.SelectSingleNode("Notes");
 
+            //清空<Notes>的子节点
+            notes.RemoveAll();
+            
+            //创建<Note>节点
             foreach (var item in textBoxs)
             {
                 XmlElement note = doc.CreateElement("Note"); //创建一个<Note>节点
