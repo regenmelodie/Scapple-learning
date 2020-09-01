@@ -42,12 +42,22 @@
             this.OnRight = new System.Windows.Forms.ToolStripMenuItem();
             this.Format = new System.Windows.Forms.ToolStripMenuItem();
             this.Font = new System.Windows.Forms.ToolStripMenuItem();
+            this.Colors = new System.Windows.Forms.ToolStripMenuItem();
+            this.ChangeTextColor = new System.Windows.Forms.ToolStripMenuItem();
+            this.clearTextColor = new System.Windows.Forms.ToolStripMenuItem();
+            this.changeFillColor = new System.Windows.Forms.ToolStripMenuItem();
+            this.clearFillColor = new System.Windows.Forms.ToolStripMenuItem();
             this.saveFileDialog = new System.Windows.Forms.SaveFileDialog();
             this.label1 = new System.Windows.Forms.Label();
             this.label_Location = new System.Windows.Forms.Label();
-            this.Colors = new System.Windows.Forms.ToolStripMenuItem();
-            this.ChangeTextColor = new System.Windows.Forms.ToolStripMenuItem();
             this.colorDialog = new System.Windows.Forms.ColorDialog();
+            this.Bigger = new System.Windows.Forms.ToolStripMenuItem();
+            this.Smaller = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripMenuItem1 = new System.Windows.Forms.ToolStripSeparator();
+            this.toolStripMenuItem4 = new System.Windows.Forms.ToolStripSeparator();
+            this.toolStripMenuItem5 = new System.Windows.Forms.ToolStripSeparator();
+            this.Above = new System.Windows.Forms.ToolStripMenuItem();
+            this.Below = new System.Windows.Forms.ToolStripMenuItem();
             this.menuStrip.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -69,6 +79,7 @@
             this.File.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.New,
             this.ToolStripMenuItem2,
+            this.toolStripMenuItem5,
             this.ToolStripMenuItem3,
             this.Save,
             this.SaveAs});
@@ -79,33 +90,33 @@
             // New
             // 
             this.New.Name = "New";
-            this.New.Size = new System.Drawing.Size(157, 30);
+            this.New.Size = new System.Drawing.Size(252, 30);
             this.New.Text = "New";
             this.New.Click += new System.EventHandler(this.New_Click);
             // 
             // ToolStripMenuItem2
             // 
             this.ToolStripMenuItem2.Name = "ToolStripMenuItem2";
-            this.ToolStripMenuItem2.Size = new System.Drawing.Size(157, 30);
+            this.ToolStripMenuItem2.Size = new System.Drawing.Size(252, 30);
             this.ToolStripMenuItem2.Text = "Open";
             // 
             // ToolStripMenuItem3
             // 
             this.ToolStripMenuItem3.Name = "ToolStripMenuItem3";
-            this.ToolStripMenuItem3.Size = new System.Drawing.Size(157, 30);
+            this.ToolStripMenuItem3.Size = new System.Drawing.Size(252, 30);
             this.ToolStripMenuItem3.Text = "Close";
             // 
             // Save
             // 
             this.Save.Name = "Save";
-            this.Save.Size = new System.Drawing.Size(157, 30);
+            this.Save.Size = new System.Drawing.Size(252, 30);
             this.Save.Text = "Save";
             this.Save.Click += new System.EventHandler(this.Save_Click);
             // 
             // SaveAs
             // 
             this.SaveAs.Name = "SaveAs";
-            this.SaveAs.Size = new System.Drawing.Size(157, 30);
+            this.SaveAs.Size = new System.Drawing.Size(252, 30);
             this.SaveAs.Text = "Save As";
             this.SaveAs.Click += new System.EventHandler(this.SaveAs_Click);
             // 
@@ -129,7 +140,9 @@
             // 
             this.NewConnectedNote.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.OnLeft,
-            this.OnRight});
+            this.OnRight,
+            this.Above,
+            this.Below});
             this.NewConnectedNote.Name = "NewConnectedNote";
             this.NewConnectedNote.Size = new System.Drawing.Size(277, 30);
             this.NewConnectedNote.Text = "New Connected Note";
@@ -146,6 +159,7 @@
             this.OnRight.Name = "OnRight";
             this.OnRight.Size = new System.Drawing.Size(252, 30);
             this.OnRight.Text = "On Right";
+            this.OnRight.Click += new System.EventHandler(this.OnRight_Click);
             // 
             // Format
             // 
@@ -158,10 +172,51 @@
             // 
             // Font
             // 
+            this.Font.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.Bigger,
+            this.Smaller,
+            this.toolStripMenuItem1});
             this.Font.Name = "Font";
             this.Font.Size = new System.Drawing.Size(252, 30);
             this.Font.Text = "Font";
-            this.Font.Click += new System.EventHandler(this.Font_Click);
+            // 
+            // Colors
+            // 
+            this.Colors.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.ChangeTextColor,
+            this.clearTextColor,
+            this.toolStripMenuItem4,
+            this.changeFillColor,
+            this.clearFillColor});
+            this.Colors.Name = "Colors";
+            this.Colors.Size = new System.Drawing.Size(252, 30);
+            this.Colors.Text = "Colors";
+            // 
+            // ChangeTextColor
+            // 
+            this.ChangeTextColor.Name = "ChangeTextColor";
+            this.ChangeTextColor.Size = new System.Drawing.Size(252, 30);
+            this.ChangeTextColor.Text = "Change Text Color";
+            this.ChangeTextColor.Click += new System.EventHandler(this.ChangeTextColor_Click);
+            // 
+            // clearTextColor
+            // 
+            this.clearTextColor.Name = "clearTextColor";
+            this.clearTextColor.Size = new System.Drawing.Size(252, 30);
+            this.clearTextColor.Text = "Clear Text Color";
+            // 
+            // changeFillColor
+            // 
+            this.changeFillColor.Name = "changeFillColor";
+            this.changeFillColor.Size = new System.Drawing.Size(252, 30);
+            this.changeFillColor.Text = "Change Fill Color";
+            this.changeFillColor.Click += new System.EventHandler(this.changeFillColor_Click);
+            // 
+            // clearFillColor
+            // 
+            this.clearFillColor.Name = "clearFillColor";
+            this.clearFillColor.Size = new System.Drawing.Size(252, 30);
+            this.clearFillColor.Text = "Clear Fill Color";
             // 
             // label1
             // 
@@ -182,20 +237,48 @@
             this.label_Location.TabIndex = 3;
             this.label_Location.Text = "         ";
             // 
-            // Colors
+            // Bigger
             // 
-            this.Colors.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.ChangeTextColor});
-            this.Colors.Name = "Colors";
-            this.Colors.Size = new System.Drawing.Size(252, 30);
-            this.Colors.Text = "Colors";
+            this.Bigger.Name = "Bigger";
+            this.Bigger.Size = new System.Drawing.Size(252, 30);
+            this.Bigger.Text = "Bigger";
+            this.Bigger.Click += new System.EventHandler(this.Bigger_Click);
             // 
-            // ChangeTextColor
+            // Smaller
             // 
-            this.ChangeTextColor.Name = "ChangeTextColor";
-            this.ChangeTextColor.Size = new System.Drawing.Size(252, 30);
-            this.ChangeTextColor.Text = "Change Text Color";
-            this.ChangeTextColor.Click += new System.EventHandler(this.ChangeTextColor_Click);
+            this.Smaller.Name = "Smaller";
+            this.Smaller.Size = new System.Drawing.Size(252, 30);
+            this.Smaller.Text = "Smaller";
+            this.Smaller.Click += new System.EventHandler(this.Smaller_Click);
+            // 
+            // toolStripMenuItem1
+            // 
+            this.toolStripMenuItem1.Name = "toolStripMenuItem1";
+            this.toolStripMenuItem1.Size = new System.Drawing.Size(249, 6);
+            // 
+            // toolStripMenuItem4
+            // 
+            this.toolStripMenuItem4.Name = "toolStripMenuItem4";
+            this.toolStripMenuItem4.Size = new System.Drawing.Size(249, 6);
+            // 
+            // toolStripMenuItem5
+            // 
+            this.toolStripMenuItem5.Name = "toolStripMenuItem5";
+            this.toolStripMenuItem5.Size = new System.Drawing.Size(249, 6);
+            // 
+            // Above
+            // 
+            this.Above.Name = "Above";
+            this.Above.Size = new System.Drawing.Size(252, 30);
+            this.Above.Text = "Above";
+            this.Above.Click += new System.EventHandler(this.Above_Click);
+            // 
+            // Below
+            // 
+            this.Below.Name = "Below";
+            this.Below.Size = new System.Drawing.Size(252, 30);
+            this.Below.Text = "Below";
+            this.Below.Click += new System.EventHandler(this.Below_Click);
             // 
             // Form1
             // 
@@ -236,6 +319,16 @@
         private System.Windows.Forms.ToolStripMenuItem Colors;
         private System.Windows.Forms.ToolStripMenuItem ChangeTextColor;
         private System.Windows.Forms.ColorDialog colorDialog;
+        private System.Windows.Forms.ToolStripMenuItem clearTextColor;
+        private System.Windows.Forms.ToolStripMenuItem changeFillColor;
+        private System.Windows.Forms.ToolStripMenuItem clearFillColor;
+        private System.Windows.Forms.ToolStripMenuItem Bigger;
+        private System.Windows.Forms.ToolStripMenuItem Smaller;
+        private System.Windows.Forms.ToolStripSeparator toolStripMenuItem1;
+        private System.Windows.Forms.ToolStripSeparator toolStripMenuItem4;
+        private System.Windows.Forms.ToolStripSeparator toolStripMenuItem5;
+        private System.Windows.Forms.ToolStripMenuItem Above;
+        private System.Windows.Forms.ToolStripMenuItem Below;
     }
 }
 

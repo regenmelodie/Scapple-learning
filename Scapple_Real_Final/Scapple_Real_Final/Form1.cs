@@ -21,7 +21,6 @@ namespace Scapple_Real_Final
         private Point mouseOffset; //记录鼠标指针的坐标
         private TextBox current_textBox;
         private int id = -1; //记录Note的ID，本程序为用户创建的Note自动分配ID
-        private FontDialog fontDialog; //字体设置框
         private Dictionary<string, ArrayList> connects; //记录节点间的关系，<id, connect_id>，为每个节点创建一个ArrayList，记录其关联节点的id
         private Graphics g; //画布
         private Pen pen;
@@ -31,7 +30,6 @@ namespace Scapple_Real_Final
         {
             InitializeComponent();
             textBoxs = new Dictionary<string, TextBox>();
-            fontDialog = new FontDialog();
             connects = new Dictionary<string, ArrayList>();   
             
             g = Graphics.FromHwnd(this.Handle);
@@ -303,17 +301,30 @@ namespace Scapple_Real_Final
                 alignment.InnerText = "Left";
 
                 XmlElement textColor = doc.CreateElement("TextColor");
-                decimal _r = (decimal)item.Value.ForeColor.R / 255;
-                decimal _g = (decimal)item.Value.ForeColor.G / 255;
-                decimal _b = (decimal)item.Value.ForeColor.B / 255;
-                string r, g, b;
-                if (_r == (int)_r) r = _r.ToString() + ".0";
-                else r = Math.Round(_r, 6, MidpointRounding.ToEven).ToString();
-                if (_g == (int)_g) g = _g.ToString() + ".0";
-                else g = Math.Round(_g, 6, MidpointRounding.ToEven).ToString();
-                if (_b == (int)_b) b = _b.ToString() + ".0";
-                else b = Math.Round(_b, 6, MidpointRounding.ToEven).ToString();
-                textColor.InnerText = r + " " + g + " " + b;
+                decimal textColor_r = (decimal)item.Value.ForeColor.R / 255;
+                decimal textColor_g = (decimal)item.Value.ForeColor.G / 255;
+                decimal textColor_b = (decimal)item.Value.ForeColor.B / 255;
+                string textColorR, textColorG, textColorB;
+                if (textColor_r == (int)textColor_r) textColorR = textColor_r.ToString() + ".0";
+                else textColorR = Math.Round(textColor_r, 6, MidpointRounding.ToEven).ToString();
+                if (textColor_g == (int)textColor_g) textColorG = textColor_g.ToString() + ".0";
+                else textColorG = Math.Round(textColor_g, 6, MidpointRounding.ToEven).ToString();
+                if (textColor_b == (int)textColor_b) textColorB = textColor_b.ToString() + ".0";
+                else textColorB = Math.Round(textColor_b, 6, MidpointRounding.ToEven).ToString();
+                textColor.InnerText = textColorR + " " + textColorG + " " + textColorB;
+
+                XmlElement fill = doc.CreateElement("Fill");
+                decimal fill_r = (decimal)item.Value.BackColor.R / 255;
+                decimal fill_g = (decimal)item.Value.BackColor.G / 255;
+                decimal fill_b = (decimal)item.Value.BackColor.B / 255;
+                string fillR, fillG, fillB;
+                if (fill_r == (int)fill_r) fillR = fill_r.ToString() + ".0";
+                else fillR = Math.Round(fill_r, 6, MidpointRounding.ToEven).ToString();
+                if (fill_g == (int)fill_g) fillG = fill_g.ToString() + ".0";
+                else fillG = Math.Round(fill_g, 6, MidpointRounding.ToEven).ToString();
+                if (fill_b == (int)fill_b) fillB = fill_b.ToString() + ".0";
+                else fillB = Math.Round(fill_b, 6, MidpointRounding.ToEven).ToString();
+                fill.InnerText = fillR + " " + fillG + " " + fillB;
 
                 XmlElement border = doc.CreateElement("Border");
                 border.SetAttribute("Weight", "0");
@@ -321,6 +332,7 @@ namespace Scapple_Real_Final
 
                 appearance.AppendChild(alignment); //添加到<Appearance>节点中
                 appearance.AppendChild(textColor);
+                appearance.AppendChild(fill);
                 appearance.AppendChild(border);
 
                 XmlElement _string = doc.CreateElement("String");
@@ -408,15 +420,7 @@ namespace Scapple_Real_Final
             textBoxs[current_textBox.Name].Text = current_textBox.Text;
             //MessageBox.Show(current_textBox.Text);
         }
-
-        private void Font_Click(object sender, EventArgs e)
-        {
-            fontDialog.ShowDialog();
-
-            current_textBox.Font = fontDialog.Font;
-            textBoxs[current_textBox.Name].Font = current_textBox.Font;
-        }
-
+        
         private void draw_line()
         {
             g.Clear(this.BackColor);
@@ -444,7 +448,7 @@ namespace Scapple_Real_Final
             current_textBox.Name = id.ToString(); //textBox的Name属性就是Note的id字符串
             current_textBox.Text = "New Note";
             current_textBox.Size = new System.Drawing.Size(90, 26);
-            current_textBox.Font = new Font("Times New Roman", 12, FontStyle.Bold);
+            current_textBox.Font = new Font("Times New Roman", 12, FontStyle.Regular);
             current_textBox.Location = new System.Drawing.Point(location_x, location_y);
             current_textBox.TabStop = false;
 
@@ -468,24 +472,77 @@ namespace Scapple_Real_Final
             new_note(150, 150);
             current_textBox.Location = new System.Drawing.Point(150, 150);
         }
+        
+        private void ChangeTextColor_Click(object sender, EventArgs e)
+        {
+            colorDialog.ShowDialog();
+            current_textBox.ForeColor = colorDialog.Color;
+            textBoxs[current_textBox.Name].ForeColor = current_textBox.ForeColor;
+        }
+
+        private void changeFillColor_Click(object sender, EventArgs e)
+        {
+            colorDialog.ShowDialog();
+            current_textBox.BackColor = colorDialog.Color;
+            textBoxs[current_textBox.Name].BackColor = current_textBox.BackColor;
+        }
 
         private void OnLeft_Click(object sender, EventArgs e)
         {
             TextBox old_textBox = current_textBox;
 
             new_note(old_textBox.Location.X - 100, old_textBox.Location.Y);
-            
+
             connects[old_textBox.Name].Add(current_textBox.Name);
             connects[current_textBox.Name].Add(old_textBox.Name);
-            
+
             draw_line();
         }
 
-        private void ChangeTextColor_Click(object sender, EventArgs e)
+        private void OnRight_Click(object sender, EventArgs e)
         {
-            colorDialog.ShowDialog();
-            current_textBox.ForeColor = colorDialog.Color;
-            textBoxs[current_textBox.Name].ForeColor = current_textBox.ForeColor;
+            TextBox old_textBox = current_textBox;
+
+            new_note(old_textBox.Location.X + 200, old_textBox.Location.Y);
+
+            connects[old_textBox.Name].Add(current_textBox.Name);
+            connects[current_textBox.Name].Add(old_textBox.Name);
+
+            draw_line();
+        }
+
+        private void Above_Click(object sender, EventArgs e)
+        {
+            TextBox old_textBox = current_textBox;
+
+            new_note(old_textBox.Location.X, old_textBox.Location.Y - 40);
+
+            connects[old_textBox.Name].Add(current_textBox.Name);
+            connects[current_textBox.Name].Add(old_textBox.Name);
+
+            draw_line();
+        }
+
+        private void Below_Click(object sender, EventArgs e)
+        {
+            TextBox old_textBox = current_textBox;
+
+            new_note(old_textBox.Location.X, old_textBox.Location.Y + 40);
+
+            connects[old_textBox.Name].Add(current_textBox.Name);
+            connects[current_textBox.Name].Add(old_textBox.Name);
+
+            draw_line();
+        }
+
+        private void Bigger_Click(object sender, EventArgs e)
+        {
+            current_textBox.Font = new Font("Times New Roman", current_textBox.Font.Size + 1, FontStyle.Regular);
+        }
+
+        private void Smaller_Click(object sender, EventArgs e)
+        {
+            current_textBox.Font = new Font("Times New Roman", current_textBox.Font.Size - 1, FontStyle.Regular);
         }
     }
 }
