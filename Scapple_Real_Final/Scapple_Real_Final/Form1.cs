@@ -40,7 +40,7 @@ namespace Scapple_Real_Final
             
             label = new Label();
             label.Text = "Please create a file.";
-            label.Location = new System.Drawing.Point(Screen.PrimaryScreen.WorkingArea.Width/4, Screen.PrimaryScreen.WorkingArea.Height/4);
+            label.Location = new System.Drawing.Point(Screen.PrimaryScreen.WorkingArea.Width/5, Screen.PrimaryScreen.WorkingArea.Height/4);
             label.Size = new Size(200, 30);
             this.Controls.Add(label);
         }
@@ -292,7 +292,7 @@ namespace Scapple_Real_Final
                 XmlElement note = doc.CreateElement("Note"); //创建一个<Note>节点
 
                 //设置该节点属性
-                note.SetAttribute("Width", item.Value.Size.Width.ToString());
+                note.SetAttribute("Width", (item.Value.Size.Width * 1.2).ToString()); //*1.2为放缩到Scapple软件合适
                 note.SetAttribute("FontSize", item.Value.Font.Size.ToString());
                 note.SetAttribute("ID", item.Value.Name);
                 note.SetAttribute("Position", item.Value.Location.X.ToString() + "," + item.Value.Location.Y.ToString());
@@ -435,7 +435,11 @@ namespace Scapple_Real_Final
         private void textBox_TextChanged(object sender, EventArgs e)
         {
             textBoxs[current_textBox.Name].Text = current_textBox.Text;
-            //MessageBox.Show(current_textBox.Text);
+
+            Graphics graphics = current_textBox.CreateGraphics();
+            System.Drawing.SizeF s = graphics.MeasureString(current_textBox.Text, current_textBox.Font);
+            current_textBox.Width = (int)s.Width + 3;
+            textBoxs[current_textBox.Name].Width = current_textBox.Width;
         }
         
         private void draw_line()
@@ -464,11 +468,13 @@ namespace Scapple_Real_Final
             id += 1;
             current_textBox.Name = id.ToString(); //textBox的Name属性就是Note的id字符串
             current_textBox.Text = "New Note";
-            current_textBox.Size = new System.Drawing.Size(90, 26);
             current_textBox.Font = new Font("Times New Roman", 12, FontStyle.Regular);
+            current_textBox.Width += 3;
+            current_textBox.Size = new System.Drawing.Size(current_textBox.Width, current_textBox.Height);
             current_textBox.Location = new System.Drawing.Point(location_x, location_y);
             current_textBox.TabStop = false;
             current_textBox.TextAlign = HorizontalAlignment.Left;
+            current_textBox.BorderStyle = BorderStyle.None;
 
             //新建空关联节点ArrayList，并插入节点关系Dictionary
             ArrayList array = new ArrayList();
@@ -489,8 +495,11 @@ namespace Scapple_Real_Final
 
         private void NewNote_Click(object sender, EventArgs e)
         {
-            new_note(150, 150);
-            current_textBox.Location = new System.Drawing.Point(150, 150);
+            int x, y;
+            x = 250;
+            y = 200;
+            new_note(x, y);
+            current_textBox.Location = new System.Drawing.Point(x, y);
         }
         
         private void ChangeTextColor_Click(object sender, EventArgs e)
@@ -511,8 +520,8 @@ namespace Scapple_Real_Final
         private void OnLeft_Click(object sender, EventArgs e)
         {
             TextBox old_textBox = current_textBox;
-
-            new_note(old_textBox.Location.X - 100, old_textBox.Location.Y);
+            
+            new_note(old_textBox.Location.X - 103 - 15, old_textBox.Location.Y); //103是"New Note"的默认宽度
 
             connects[old_textBox.Name].Add(current_textBox.Name);
             connects[current_textBox.Name].Add(old_textBox.Name);
@@ -524,7 +533,7 @@ namespace Scapple_Real_Final
         {
             TextBox old_textBox = current_textBox;
 
-            new_note(old_textBox.Location.X + 200, old_textBox.Location.Y);
+            new_note(old_textBox.Location.X + old_textBox.Width + 15, old_textBox.Location.Y);
 
             connects[old_textBox.Name].Add(current_textBox.Name);
             connects[current_textBox.Name].Add(old_textBox.Name);
@@ -536,7 +545,7 @@ namespace Scapple_Real_Final
         {
             TextBox old_textBox = current_textBox;
 
-            new_note(old_textBox.Location.X, old_textBox.Location.Y - 40);
+            new_note(old_textBox.Location.X, old_textBox.Location.Y - 19 - 10); //19是"New Note"的默认高度
 
             connects[old_textBox.Name].Add(current_textBox.Name);
             connects[current_textBox.Name].Add(old_textBox.Name);
@@ -548,7 +557,7 @@ namespace Scapple_Real_Final
         {
             TextBox old_textBox = current_textBox;
 
-            new_note(old_textBox.Location.X, old_textBox.Location.Y + 40);
+            new_note(old_textBox.Location.X, old_textBox.Location.Y + old_textBox.Height + 10);
 
             connects[old_textBox.Name].Add(current_textBox.Name);
             connects[current_textBox.Name].Add(old_textBox.Name);
@@ -608,6 +617,24 @@ namespace Scapple_Real_Final
         {
             current_textBox.Font = new Font("Times New Roman", current_textBox.Font.Size, FontStyle.Strikeout);
             textBoxs[current_textBox.Name].Font = current_textBox.Font;
+        }
+
+        private void Open_Click(object sender, EventArgs e)
+        {
+            textBoxs.Clear();
+            current_textBox = null;
+            id = -1;
+            connects.Clear();
+            label.Hide();
+            fillFlag.Clear();
+
+            openFileDialog.ShowDialog();
+            path = openFileDialog.FileName;
+
+            doc = new XmlDocument();
+            doc.Load(path);
+
+
         }
     }
 }

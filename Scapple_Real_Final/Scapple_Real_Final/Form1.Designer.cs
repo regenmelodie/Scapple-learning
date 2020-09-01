@@ -31,9 +31,9 @@
             this.menuStrip = new System.Windows.Forms.MenuStrip();
             this.File = new System.Windows.Forms.ToolStripMenuItem();
             this.New = new System.Windows.Forms.ToolStripMenuItem();
-            this.ToolStripMenuItem2 = new System.Windows.Forms.ToolStripMenuItem();
+            this.Open = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripMenuItem5 = new System.Windows.Forms.ToolStripSeparator();
-            this.ToolStripMenuItem3 = new System.Windows.Forms.ToolStripMenuItem();
+            this.Close = new System.Windows.Forms.ToolStripMenuItem();
             this.Save = new System.Windows.Forms.ToolStripMenuItem();
             this.SaveAs = new System.Windows.Forms.ToolStripMenuItem();
             this.Notes = new System.Windows.Forms.ToolStripMenuItem();
@@ -51,6 +51,10 @@
             this.Bigger = new System.Windows.Forms.ToolStripMenuItem();
             this.Smaller = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripMenuItem1 = new System.Windows.Forms.ToolStripSeparator();
+            this.Bold = new System.Windows.Forms.ToolStripMenuItem();
+            this.Italic = new System.Windows.Forms.ToolStripMenuItem();
+            this.UnderLine = new System.Windows.Forms.ToolStripMenuItem();
+            this.StrikeThrough = new System.Windows.Forms.ToolStripMenuItem();
             this.Colors = new System.Windows.Forms.ToolStripMenuItem();
             this.ChangeTextColor = new System.Windows.Forms.ToolStripMenuItem();
             this.clearTextColor = new System.Windows.Forms.ToolStripMenuItem();
@@ -65,10 +69,7 @@
             this.label1 = new System.Windows.Forms.Label();
             this.label_Location = new System.Windows.Forms.Label();
             this.colorDialog = new System.Windows.Forms.ColorDialog();
-            this.Bold = new System.Windows.Forms.ToolStripMenuItem();
-            this.Italic = new System.Windows.Forms.ToolStripMenuItem();
-            this.UnderLine = new System.Windows.Forms.ToolStripMenuItem();
-            this.StrikeThrough = new System.Windows.Forms.ToolStripMenuItem();
+            this.openFileDialog = new System.Windows.Forms.OpenFileDialog();
             this.menuStrip.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -81,7 +82,7 @@
             this.Format});
             this.menuStrip.Location = new System.Drawing.Point(0, 0);
             this.menuStrip.Name = "menuStrip";
-            this.menuStrip.Size = new System.Drawing.Size(1320, 32);
+            this.menuStrip.Size = new System.Drawing.Size(1112, 32);
             this.menuStrip.TabIndex = 0;
             this.menuStrip.Text = "menuStrip1";
             // 
@@ -89,9 +90,9 @@
             // 
             this.File.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.New,
-            this.ToolStripMenuItem2,
+            this.Open,
             this.toolStripMenuItem5,
-            this.ToolStripMenuItem3,
+            this.Close,
             this.Save,
             this.SaveAs});
             this.File.Name = "File";
@@ -101,38 +102,39 @@
             // New
             // 
             this.New.Name = "New";
-            this.New.Size = new System.Drawing.Size(157, 30);
+            this.New.Size = new System.Drawing.Size(252, 30);
             this.New.Text = "New";
             this.New.Click += new System.EventHandler(this.New_Click);
             // 
-            // ToolStripMenuItem2
+            // Open
             // 
-            this.ToolStripMenuItem2.Name = "ToolStripMenuItem2";
-            this.ToolStripMenuItem2.Size = new System.Drawing.Size(157, 30);
-            this.ToolStripMenuItem2.Text = "Open";
+            this.Open.Name = "Open";
+            this.Open.Size = new System.Drawing.Size(252, 30);
+            this.Open.Text = "Open";
+            this.Open.Click += new System.EventHandler(this.Open_Click);
             // 
             // toolStripMenuItem5
             // 
             this.toolStripMenuItem5.Name = "toolStripMenuItem5";
-            this.toolStripMenuItem5.Size = new System.Drawing.Size(154, 6);
+            this.toolStripMenuItem5.Size = new System.Drawing.Size(249, 6);
             // 
-            // ToolStripMenuItem3
+            // Close
             // 
-            this.ToolStripMenuItem3.Name = "ToolStripMenuItem3";
-            this.ToolStripMenuItem3.Size = new System.Drawing.Size(157, 30);
-            this.ToolStripMenuItem3.Text = "Close";
+            this.Close.Name = "Close";
+            this.Close.Size = new System.Drawing.Size(252, 30);
+            this.Close.Text = "Close";
             // 
             // Save
             // 
             this.Save.Name = "Save";
-            this.Save.Size = new System.Drawing.Size(157, 30);
+            this.Save.Size = new System.Drawing.Size(252, 30);
             this.Save.Text = "Save";
             this.Save.Click += new System.EventHandler(this.Save_Click);
             // 
             // SaveAs
             // 
             this.SaveAs.Name = "SaveAs";
-            this.SaveAs.Size = new System.Drawing.Size(157, 30);
+            this.SaveAs.Size = new System.Drawing.Size(252, 30);
             this.SaveAs.Text = "Save As";
             this.SaveAs.Click += new System.EventHandler(this.SaveAs_Click);
             // 
@@ -232,27 +234,55 @@
             this.UnderLine,
             this.StrikeThrough});
             this.Font.Name = "Font";
-            this.Font.Size = new System.Drawing.Size(252, 30);
+            this.Font.Size = new System.Drawing.Size(183, 30);
             this.Font.Text = "Font";
             // 
             // Bigger
             // 
             this.Bigger.Name = "Bigger";
-            this.Bigger.Size = new System.Drawing.Size(252, 30);
+            this.Bigger.Size = new System.Drawing.Size(214, 30);
             this.Bigger.Text = "Bigger";
             this.Bigger.Click += new System.EventHandler(this.Bigger_Click);
             // 
             // Smaller
             // 
             this.Smaller.Name = "Smaller";
-            this.Smaller.Size = new System.Drawing.Size(252, 30);
+            this.Smaller.Size = new System.Drawing.Size(214, 30);
             this.Smaller.Text = "Smaller";
             this.Smaller.Click += new System.EventHandler(this.Smaller_Click);
             // 
             // toolStripMenuItem1
             // 
             this.toolStripMenuItem1.Name = "toolStripMenuItem1";
-            this.toolStripMenuItem1.Size = new System.Drawing.Size(249, 6);
+            this.toolStripMenuItem1.Size = new System.Drawing.Size(211, 6);
+            // 
+            // Bold
+            // 
+            this.Bold.Name = "Bold";
+            this.Bold.Size = new System.Drawing.Size(214, 30);
+            this.Bold.Text = "Bold";
+            this.Bold.Click += new System.EventHandler(this.Bold_Click);
+            // 
+            // Italic
+            // 
+            this.Italic.Name = "Italic";
+            this.Italic.Size = new System.Drawing.Size(214, 30);
+            this.Italic.Text = "Italic";
+            this.Italic.Click += new System.EventHandler(this.Italic_Click);
+            // 
+            // UnderLine
+            // 
+            this.UnderLine.Name = "UnderLine";
+            this.UnderLine.Size = new System.Drawing.Size(214, 30);
+            this.UnderLine.Text = "UnderLine";
+            this.UnderLine.Click += new System.EventHandler(this.UnderLine_Click);
+            // 
+            // StrikeThrough
+            // 
+            this.StrikeThrough.Name = "StrikeThrough";
+            this.StrikeThrough.Size = new System.Drawing.Size(214, 30);
+            this.StrikeThrough.Text = "StrikeThrough";
+            this.StrikeThrough.Click += new System.EventHandler(this.StrikeThrough_Click);
             // 
             // Colors
             // 
@@ -263,7 +293,7 @@
             this.ChangeFillColor,
             this.clearFillColor});
             this.Colors.Name = "Colors";
-            this.Colors.Size = new System.Drawing.Size(252, 30);
+            this.Colors.Size = new System.Drawing.Size(183, 30);
             this.Colors.Text = "Colors";
             // 
             // ChangeTextColor
@@ -304,7 +334,7 @@
             this.Center,
             this.AlignRight});
             this.Alignment.Name = "Alignment";
-            this.Alignment.Size = new System.Drawing.Size(252, 30);
+            this.Alignment.Size = new System.Drawing.Size(183, 30);
             this.Alignment.Text = "Alignment";
             // 
             // AlignLeft
@@ -331,7 +361,7 @@
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(1071, 49);
+            this.label1.Location = new System.Drawing.Point(889, 47);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(80, 18);
             this.label1.TabIndex = 2;
@@ -341,45 +371,21 @@
             // 
             this.label_Location.AutoSize = true;
             this.label_Location.BackColor = System.Drawing.SystemColors.ControlLight;
-            this.label_Location.Location = new System.Drawing.Point(1160, 49);
+            this.label_Location.Location = new System.Drawing.Point(975, 47);
             this.label_Location.Name = "label_Location";
             this.label_Location.Size = new System.Drawing.Size(89, 18);
             this.label_Location.TabIndex = 3;
             this.label_Location.Text = "         ";
             // 
-            // Bold
+            // openFileDialog
             // 
-            this.Bold.Name = "Bold";
-            this.Bold.Size = new System.Drawing.Size(252, 30);
-            this.Bold.Text = "Bold";
-            this.Bold.Click += new System.EventHandler(this.Bold_Click);
-            // 
-            // Italic
-            // 
-            this.Italic.Name = "Italic";
-            this.Italic.Size = new System.Drawing.Size(252, 30);
-            this.Italic.Text = "Italic";
-            this.Italic.Click += new System.EventHandler(this.Italic_Click);
-            // 
-            // UnderLine
-            // 
-            this.UnderLine.Name = "UnderLine";
-            this.UnderLine.Size = new System.Drawing.Size(252, 30);
-            this.UnderLine.Text = "UnderLine";
-            this.UnderLine.Click += new System.EventHandler(this.UnderLine_Click);
-            // 
-            // StrikeThrough
-            // 
-            this.StrikeThrough.Name = "StrikeThrough";
-            this.StrikeThrough.Size = new System.Drawing.Size(252, 30);
-            this.StrikeThrough.Text = "StrikeThrough";
-            this.StrikeThrough.Click += new System.EventHandler(this.StrikeThrough_Click);
+            this.openFileDialog.FileName = "openFileDialog1";
             // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 18F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1320, 748);
+            this.ClientSize = new System.Drawing.Size(1112, 713);
             this.Controls.Add(this.label_Location);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.menuStrip);
@@ -397,8 +403,8 @@
         private System.Windows.Forms.MenuStrip menuStrip;
         private System.Windows.Forms.ToolStripMenuItem File;
         private System.Windows.Forms.ToolStripMenuItem New;
-        private System.Windows.Forms.ToolStripMenuItem ToolStripMenuItem2;
-        private System.Windows.Forms.ToolStripMenuItem ToolStripMenuItem3;
+        private System.Windows.Forms.ToolStripMenuItem Open;
+        private System.Windows.Forms.ToolStripMenuItem Close;
         private System.Windows.Forms.ToolStripMenuItem Save;
         private System.Windows.Forms.SaveFileDialog saveFileDialog;
         private System.Windows.Forms.ToolStripMenuItem SaveAs;
@@ -435,6 +441,7 @@
         private System.Windows.Forms.ToolStripMenuItem Italic;
         private System.Windows.Forms.ToolStripMenuItem UnderLine;
         private System.Windows.Forms.ToolStripMenuItem StrikeThrough;
+        private System.Windows.Forms.OpenFileDialog openFileDialog;
     }
 }
 
