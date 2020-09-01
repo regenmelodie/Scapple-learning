@@ -25,13 +25,15 @@ namespace Scapple_Real_Final
         private Graphics g; //画布
         private Pen pen;
         private Label label; //在未新建文件时显示
+        private Dictionary<string, bool> fillFlag; //记录Fill属性是否要写，默认不写为false
 
         public Form1()
         {
             InitializeComponent();
             textBoxs = new Dictionary<string, TextBox>();
-            connects = new Dictionary<string, ArrayList>();   
-            
+            connects = new Dictionary<string, ArrayList>();
+            fillFlag = new Dictionary<string, bool>();
+
             g = Graphics.FromHwnd(this.Handle);
             pen = new Pen(Color.Gray, 1);
             pen.DashStyle = System.Drawing.Drawing2D.DashStyle.Dot;
@@ -298,7 +300,7 @@ namespace Scapple_Real_Final
                 XmlElement appearance = doc.CreateElement("Appearance");
 
                 XmlElement alignment = doc.CreateElement("Alignment");
-                alignment.InnerText = "Left";
+                alignment.InnerText = item.Value.TextAlign.ToString();
 
                 XmlElement textColor = doc.CreateElement("TextColor");
                 decimal textColor_r = (decimal)item.Value.ForeColor.R / 255;
@@ -332,9 +334,24 @@ namespace Scapple_Real_Final
 
                 appearance.AppendChild(alignment); //添加到<Appearance>节点中
                 appearance.AppendChild(textColor);
-                appearance.AppendChild(fill);
+                if (fillFlag[item.Value.Name] == true) appearance.AppendChild(fill);
                 appearance.AppendChild(border);
+                
+                if (item.Value.Font.Bold || item.Value.Font.Italic || item.Value.Font.Underline || item.Value.Font.Strikeout)
+                {
+                    XmlElement formatting = doc.CreateElement("Formatting");
+                    XmlElement formatRange = doc.CreateElement("FormatRange");
 
+                    if (item.Value.Font.Bold == true)  formatRange.SetAttribute("Bold", "Yes");
+                    else if (item.Value.Font.Italic == true) formatRange.SetAttribute("Italic", "Yes");
+                    else if (item.Value.Font.Underline == true) formatRange.SetAttribute("Underline", "Yes");
+                    else if (item.Value.Font.Strikeout == true) formatRange.SetAttribute("StrikeThrough", "Yes");
+
+                    formatRange.InnerText = "0," + (item.Value.Text.Length - 1).ToString();
+                    formatting.AppendChild(formatRange);
+                    note.AppendChild(formatting);
+                }
+                
                 XmlElement _string = doc.CreateElement("String");
                 _string.InnerText = item.Value.Text;
 
@@ -451,6 +468,7 @@ namespace Scapple_Real_Final
             current_textBox.Font = new Font("Times New Roman", 12, FontStyle.Regular);
             current_textBox.Location = new System.Drawing.Point(location_x, location_y);
             current_textBox.TabStop = false;
+            current_textBox.TextAlign = HorizontalAlignment.Left;
 
             //新建空关联节点ArrayList，并插入节点关系Dictionary
             ArrayList array = new ArrayList();
@@ -465,6 +483,8 @@ namespace Scapple_Real_Final
 
             this.Controls.Add(current_textBox);
             textBoxs.Add(current_textBox.Name, current_textBox);
+
+            fillFlag.Add(current_textBox.Name, false);
         }
 
         private void NewNote_Click(object sender, EventArgs e)
@@ -480,11 +500,12 @@ namespace Scapple_Real_Final
             textBoxs[current_textBox.Name].ForeColor = current_textBox.ForeColor;
         }
 
-        private void changeFillColor_Click(object sender, EventArgs e)
+        private void ChangeFillColor_Click(object sender, EventArgs e)
         {
             colorDialog.ShowDialog();
             current_textBox.BackColor = colorDialog.Color;
             textBoxs[current_textBox.Name].BackColor = current_textBox.BackColor;
+            fillFlag[current_textBox.Name] = true;
         }
 
         private void OnLeft_Click(object sender, EventArgs e)
@@ -537,12 +558,56 @@ namespace Scapple_Real_Final
 
         private void Bigger_Click(object sender, EventArgs e)
         {
-            current_textBox.Font = new Font("Times New Roman", current_textBox.Font.Size + 1, FontStyle.Regular);
+            current_textBox.Font = new Font("Times New Roman", current_textBox.Font.Size + 1, current_textBox.Font.Style);
+            textBoxs[current_textBox.Name].Font = current_textBox.Font;
         }
 
         private void Smaller_Click(object sender, EventArgs e)
         {
-            current_textBox.Font = new Font("Times New Roman", current_textBox.Font.Size - 1, FontStyle.Regular);
+            current_textBox.Font = new Font("Times New Roman", current_textBox.Font.Size - 1, current_textBox.Font.Style);
+            textBoxs[current_textBox.Name].Font = current_textBox.Font;
+        }
+
+        private void AlignLeft_Click(object sender, EventArgs e)
+        {
+            current_textBox.TextAlign = HorizontalAlignment.Left;
+            textBoxs[current_textBox.Name].TextAlign = current_textBox.TextAlign;
+        }
+
+        private void Center_Click(object sender, EventArgs e)
+        {
+            current_textBox.TextAlign = HorizontalAlignment.Center;
+            textBoxs[current_textBox.Name].TextAlign = current_textBox.TextAlign;
+        }
+
+        private void AlignRight_Click(object sender, EventArgs e)
+        {
+            current_textBox.TextAlign = HorizontalAlignment.Right;
+            textBoxs[current_textBox.Name].TextAlign = current_textBox.TextAlign;
+        }
+
+        private void Bold_Click(object sender, EventArgs e)
+        {
+            current_textBox.Font = new Font("Times New Roman", current_textBox.Font.Size, FontStyle.Bold);
+            textBoxs[current_textBox.Name].Font = current_textBox.Font;
+        }
+
+        private void Italic_Click(object sender, EventArgs e)
+        {
+            current_textBox.Font = new Font("Times New Roman", current_textBox.Font.Size, FontStyle.Italic);
+            textBoxs[current_textBox.Name].Font = current_textBox.Font;
+        }
+
+        private void UnderLine_Click(object sender, EventArgs e)
+        {
+            current_textBox.Font = new Font("Times New Roman", current_textBox.Font.Size, FontStyle.Underline);
+            textBoxs[current_textBox.Name].Font = current_textBox.Font;
+        }
+
+        private void StrikeThrough_Click(object sender, EventArgs e)
+        {
+            current_textBox.Font = new Font("Times New Roman", current_textBox.Font.Size, FontStyle.Strikeout);
+            textBoxs[current_textBox.Name].Font = current_textBox.Font;
         }
     }
 }
