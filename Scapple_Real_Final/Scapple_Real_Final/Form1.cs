@@ -333,7 +333,7 @@ namespace Scapple_Real_Final
                 border.SetAttribute("Style", "Rounded");
 
                 appearance.AppendChild(alignment); //添加到<Appearance>节点中
-                appearance.AppendChild(textColor);
+                if (textColor.InnerText != "0.0 0.0 0.0") appearance.AppendChild(textColor);
                 if (fillFlag[item.Value.Name] == true) appearance.AppendChild(fill);
                 appearance.AppendChild(border);
                 
@@ -360,7 +360,7 @@ namespace Scapple_Real_Final
 
                 note.AppendChild(appearance);
                 note.AppendChild(_string);
-                note.AppendChild(connectedNoteIDs);
+                if (connectedNoteIDs.InnerText != "") note.AppendChild(connectedNoteIDs);
 
                 notes.AppendChild(note);
             }
@@ -622,6 +622,7 @@ namespace Scapple_Real_Final
         private void Open_Click(object sender, EventArgs e)
         {
             textBoxs.Clear();
+            isMouseDown = false;
             current_textBox = null;
             id = -1;
             connects.Clear();
@@ -631,10 +632,114 @@ namespace Scapple_Real_Final
             openFileDialog.ShowDialog();
             path = openFileDialog.FileName;
 
+            //读入
             doc = new XmlDocument();
-            doc.Load(path);
+            XmlReaderSettings settings = new XmlReaderSettings();
+            settings.IgnoreComments = true;//忽略文档里面的注释
+            XmlReader reader = XmlReader.Create(path, settings);
+            doc.Load(reader);
 
+            XmlNode scappleDocument = doc.SelectSingleNode("ScappleDocument"); //得到根节点
+            XmlNode notes = scappleDocument.SelectSingleNode("Notes"); //得到Notes节点
+            XmlNodeList noteList = notes.ChildNodes; //得到所有Note
+
+            int virtual_id = -1;
+            foreach (XmlNode note in noteList) //遍历Notes的孩子
+            {
+                TextBox textBox = new TextBox();
+
+                XmlElement note_xe = (XmlElement)note; //得到note的属性值
+                string note_width = note_xe.GetAttribute("Width");
+                string note_fontSize = note_xe.GetAttribute("FontSize");
+                string note_id = note_xe.GetAttribute("ID");
+                string note_position = note_xe.GetAttribute("Position");
+
+                XmlNodeList note_children = note.ChildNodes;
+                foreach (XmlNode note_child in note_children) //遍历Note的孩子
+                {
+                    if (note_child.Name == "Appearance")
+                    {
+                        XmlNode appearance = note.SelectSingleNode("Appearance");
+                        XmlNodeList appearance_children = appearance.ChildNodes;
+                        foreach (XmlNode appearance_child in appearance_children) //遍历appearance的孩子
+                        {
+                            if (appearance_child.Name == "Alignment")
+                            {
+                                XmlNode alignment = appearance.SelectSingleNode("Alignment");
+                                string alignment_text = alignment.InnerText; //对齐方式
+                            }
+                            if (appearance_child.Name == "Border")
+                            {
+                                XmlNode border = appearance.SelectSingleNode("Border");
+                                XmlElement border_xe = (XmlElement)border;
+                                string border_weight = border_xe.GetAttribute("Weight"); //边框宽度
+                                string border_style = border_xe.GetAttribute("Style"); //边框风格
+                            }
+                            if (appearance_child.Name == "TextColor")
+                            {
+                                XmlNode textColor = appearance.SelectSingleNode("TextColor");
+                                string textColor_text = textColor.InnerText; //文字颜色
+                            }
+                            if (appearance_child.Name == "Fill")
+                            {
+                                XmlNode fill = appearance.SelectSingleNode("Fill"); //填充色
+                            }
+
+                        }
+                    }
+
+                    if(note_child.Name == "String")
+                    {
+                        XmlNode _string = note.SelectSingleNode("String");
+                        string _string_text = _string.InnerText; //文字内容
+                    }
+
+                    if (note_child.Name == "ConnectedNoteIDs")
+                    {
+                        XmlNode connectedNoteIDs = note.SelectSingleNode("ConnectedNoteIDs");
+                        string connectedNoteIDs_text = connectedNoteIDs.InnerText; //关联关系
+                    }
+
+                }
+
+
+
+
+                //textBox.Name = note_xe.GetAttribute("ID");
+
+                
+            }
+
+            reader.Close();
 
         }
     }
 }
+/*
+current_textBox = new TextBox();
+            Name
+            current_textBox.Text = "New Note";
+            current_textBox.Font = new Font("Times New Roman", 12, FontStyle.Regular);
+current_textBox.Width += 3;
+            current_textBox.Size = new System.Drawing.Size(current_textBox.Width, current_textBox.Height);
+            current_textBox.Location = new System.Drawing.Point(location_x, location_y);
+            current_textBox.TabStop = false;
+            current_textBox.TextAlign = HorizontalAlignment.Left;
+            current_textBox.BorderStyle = BorderStyle.None;
+
+            //新建空关联节点ArrayList，并插入节点关系Dictionary
+            ArrayList array = new ArrayList();
+connects.Add(current_textBox.Name, array);
+
+            current_textBox.MouseDown += new MouseEventHandler(textBox_MouseDown);
+current_textBox.MouseMove += new MouseEventHandler(textBox_MouseMove);
+current_textBox.MouseUp += new MouseEventHandler(textBox_MouseUp);
+current_textBox.TextChanged += new EventHandler(textBox_TextChanged);
+
+label_Location.Text = current_textBox.Location.ToString();
+
+            this.Controls.Add(current_textBox);
+            textBoxs.Add(current_textBox.Name, current_textBox);
+
+            fillFlag.Add(current_textBox.Name, false);
+            */
